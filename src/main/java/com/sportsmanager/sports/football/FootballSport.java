@@ -31,13 +31,9 @@ public class FootballSport implements Sport {
 
     @Override
     public List<String> getTacticNames() {
-        return List.of(
-            "4-3-3 Attack",
-            "4-4-2 Balanced",
-            "5-3-2 Defensive",
-            "3-5-2 Pressing",
-            "4-2-3-1 Counter"
-        );
+        return FootballTactic.getAll().stream()
+                .map(FootballTactic::getName)
+                .toList();
     }
 
     @Override
