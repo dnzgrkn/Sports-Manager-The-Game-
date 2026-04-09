@@ -22,6 +22,15 @@ public class FootballMatch extends AbstractMatch {
         this.random = new Random();
     }
 
+    public FootballMatch(Team home, Team away, Sport sport, MatchEventBus eventBus, long seed) {
+        super(home.getName(), away.getName());
+        this.homeTeam = home;
+        this.awayTeam = away;
+        this.sport = sport;
+        this.eventBus = eventBus;
+        this.random = new Random(seed);
+    }
+
     @Override
     public int getPeriodCount() {
         return 2;
