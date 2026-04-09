@@ -69,11 +69,11 @@ public class FootballMatch extends AbstractMatch {
             double defendingAvgRating = homeHasBall ? awayAvgRating : homeAvgRating;
 
             // 2. Shot chance
-            if (random.nextDouble() < 0.05) {
+            if (random.nextDouble() < 0.12) {
                 // 3. Goal chance
                 double attackStrength = attackingTactic.getAttackMod() * attackingAvgRating;
                 double defenseStrength = defendingTactic.getDefenseMod() * defendingAvgRating;
-                double conversionRate = attackStrength / (attackStrength + defenseStrength) * 0.35;
+                double conversionRate = attackStrength / (attackStrength + defenseStrength) * 0.45;
 
                 if (random.nextDouble() < conversionRate) {
                     if (homeHasBall) {
