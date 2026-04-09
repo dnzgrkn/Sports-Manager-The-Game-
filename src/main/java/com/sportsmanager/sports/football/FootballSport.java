@@ -38,7 +38,15 @@ public class FootballSport implements Sport {
 
     @Override
     public PlayerAttributeSchema getAttributeSchema() {
-        return new PlayerAttributeSchema();
+        PlayerAttributeSchema schema = new PlayerAttributeSchema();
+        schema.addAttribute("pace",      40, 99);
+        schema.addAttribute("shooting",  20, 99);
+        schema.addAttribute("passing",   30, 99);
+        schema.addAttribute("dribbling", 30, 99);
+        schema.addAttribute("defending", 20, 99);
+        schema.addAttribute("heading",   20, 99);
+        schema.addAttribute("stamina",   40, 99);
+        return schema;
     }
 
     @Override

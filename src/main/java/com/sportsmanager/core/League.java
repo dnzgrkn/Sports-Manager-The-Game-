@@ -7,13 +7,15 @@ import java.util.Map;
 import java.util.UUID;
 
 public class League {
+    private final String name;
     private final List<Team> teams;
     private final List<Fixture> fixtures;
     private final Map<UUID, LeagueRecord> standings;
     private int currentWeek;
     private final Sport sport;
 
-    public League(List<Team> teams, Sport sport) {
+    public League(String name, List<Team> teams, Sport sport) {
+        this.name = name;
         this.teams = new ArrayList<>(teams);
         this.fixtures = new ArrayList<>();
         this.standings = new LinkedHashMap<>();
@@ -23,6 +25,10 @@ public class League {
         for (Team t : teams) {
             standings.put(t.getId(), new LeagueRecord(t.getId(), t.getName()));
         }
+    }
+
+    public League(List<Team> teams, Sport sport) {
+        this("", teams, sport);
     }
 
     /**
@@ -112,6 +118,7 @@ public class League {
         return max;
     }
 
+    public String getName()                         { return name; }
     public List<Team> getTeams()                    { return teams; }
     public List<Fixture> getFixtures()              { return fixtures; }
     public Map<UUID, LeagueRecord> getStandings()   { return standings; }
