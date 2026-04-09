@@ -1,5 +1,7 @@
 package com.sportsmanager.core;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 public class LeagueRecord {
@@ -12,6 +14,7 @@ public class LeagueRecord {
     private int goalsFor;
     private int goalsAgainst;
     private int points;
+    private final Map<UUID, Integer> headToHeadPoints = new HashMap<>();
 
     public LeagueRecord(UUID teamId, String teamName) {
         this.teamId = teamId;
@@ -22,6 +25,7 @@ public class LeagueRecord {
         played++;
         wins++;
         goalsFor += gf;
+        
         goalsAgainst += ga;
         points += 3;
     }
@@ -43,6 +47,14 @@ public class LeagueRecord {
 
     public int getGoalDifference() {
         return goalsFor - goalsAgainst;
+    }
+
+    public void recordHeadToHeadPoints(UUID opponentId, int pts) {
+        headToHeadPoints.merge(opponentId, pts, Integer::sum);
+    }
+
+    public int getHeadToHeadPoints(UUID opponentId) {
+        return headToHeadPoints.getOrDefault(opponentId, 0);
     }
 
     public UUID getTeamId()     { return teamId; }

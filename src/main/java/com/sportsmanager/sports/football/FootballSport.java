@@ -43,6 +43,6 @@ public class FootballSport implements Sport {
 
     @Override
     public StandingsComparator getStandingsComparator() {
-        return null;
+        return new FootballStandingsComparator();
     }
 }
