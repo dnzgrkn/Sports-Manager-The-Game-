@@ -30,6 +30,7 @@ public abstract class Player {
     }
 
     public void decrementInjury() {
+        // Guard: 0'ın altına düşmesini engelle
         if (injuredForGames > 0) {
             injuredForGames--;
         }

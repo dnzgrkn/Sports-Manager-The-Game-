@@ -1,9 +1,11 @@
 package com.sportsmanager.core;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class League {
@@ -51,11 +53,17 @@ public class League {
         // First leg
         for (int round = 0; round < rounds; round++) {
             int week = round + 1;
+            // Guard: bir takımın aynı haftada iki kez oynamasını önle
+            Set<UUID> playingThisWeek = new HashSet<>();
             for (int i = 0; i < matchesPerRound; i++) {
                 Team home = rotation.get(i);
                 Team away = rotation.get(size - 1 - i);
-                if (home != null && away != null) {
+                if (home != null && away != null
+                        && !playingThisWeek.contains(home.getId())
+                        && !playingThisWeek.contains(away.getId())) {
                     fixtures.add(new Fixture(home, away, week));
+                    playingThisWeek.add(home.getId());
+                    playingThisWeek.add(away.getId());
                 }
             }
             // rotation[0] sabit kalır, geri kalanlar saat yönünde döner

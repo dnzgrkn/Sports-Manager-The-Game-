@@ -14,11 +14,13 @@ public class LeagueRecord {
     private int goalsFor;
     private int goalsAgainst;
     private int points;
-    private final Map<UUID, Integer> headToHeadPoints = new HashMap<>();
+    // Initialize inline; constructor da garantiye alır (null deserializasyon senaryolarına karşı)
+    private Map<UUID, Integer> headToHeadPoints = new HashMap<>();
 
     public LeagueRecord(UUID teamId, String teamName) {
         this.teamId = teamId;
         this.teamName = teamName;
+        if (headToHeadPoints == null) headToHeadPoints = new HashMap<>();
     }
 
     public void recordWin(int gf, int ga) {

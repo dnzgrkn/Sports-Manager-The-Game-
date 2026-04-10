@@ -20,6 +20,11 @@ public abstract class AbstractMatch {
     public final MatchResult play() {
         preMatch();
         int periods = getPeriodCount();
+        // Guard: getPeriodCount() 0 veya negatif dönerse simülasyon atlanır
+        if (periods <= 0) {
+            isFinished = true;
+            return buildResult();
+        }
         for (int i = 0; i < periods; i++) {
             simulatePeriod(i);
             postPeriodHook(i);

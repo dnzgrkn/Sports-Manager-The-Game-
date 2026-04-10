@@ -44,6 +44,8 @@ public class FootballMatch extends AbstractMatch {
 
         FootballTactic homeTactic = (FootballTactic) homeTeam.getActiveTactic();
         FootballTactic awayTactic = (FootballTactic) awayTeam.getActiveTactic();
+        // Guard: tactic null ise NPE'yi önlemek için periyodu atla
+        if (homeTactic == null || awayTactic == null) return;
 
         double homeAvgRating = averageRating(homeLineup);
         double awayAvgRating = averageRating(awayLineup);
