@@ -45,7 +45,9 @@ class FootballMatchTest {
         MatchEventBus bus = new MatchEventBus();
         FootballMatch match = new FootballMatch(buildTeam("Home"), buildTeam("Away"), SPORT, bus);
         MatchResult result = match.play();
-        assertNotNull(result);
+        assertTrue(result.getHomeScore() >= 0);
+        assertTrue(result.getAwayScore() >= 0);
+        assertNotNull(result.getHomeTeamName());
     }
 
     @Test

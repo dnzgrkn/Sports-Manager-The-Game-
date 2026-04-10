@@ -12,4 +12,10 @@ public interface Sport {
     List<String> getPositions();
     PlayerAttributeSchema getAttributeSchema();
     List<String> getTacticNames();
+
+    /** League oluşturmayı sport implementasyonuna devreder; app katmanı DataLoader'a bağımlı olmaz. */
+    League generateLeague(String name, int teamCount);
+
+    /** Match oluşturmayı sport implementasyonuna devreder; app katmanı FootballMatch'e bağımlı olmaz. */
+    AbstractMatch createMatch(Team home, Team away, MatchEventBus eventBus);
 }

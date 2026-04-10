@@ -3,7 +3,6 @@ package com.sportsmanager.app;
 import com.sportsmanager.core.League;
 import com.sportsmanager.core.Sport;
 import com.sportsmanager.core.Team;
-import com.sportsmanager.sports.football.FootballDataLoader;
 
 public class GameSession {
 
@@ -31,8 +30,8 @@ public class GameSession {
         this.activeSport = sport;
         this.currentWeek = 1;
 
-        FootballDataLoader loader = new FootballDataLoader();
-        this.activeLeague = loader.generateLeague(leagueName, teamCount);
+        // League oluşturma sport implementasyonuna devredilir; sports paketine direkt bağımlılık yok
+        this.activeLeague = sport.generateLeague(leagueName, teamCount);
         this.playerTeam = activeLeague.getTeams().get(0);
     }
 

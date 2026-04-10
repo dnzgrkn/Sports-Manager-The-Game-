@@ -1,9 +1,6 @@
 package com.sportsmanager.sports.football;
 
-import com.sportsmanager.core.MatchRules;
-import com.sportsmanager.core.PlayerAttributeSchema;
-import com.sportsmanager.core.Sport;
-import com.sportsmanager.core.StandingsComparator;
+import com.sportsmanager.core.*;
 
 import java.util.List;
 
@@ -52,5 +49,15 @@ public class FootballSport implements Sport {
     @Override
     public StandingsComparator getStandingsComparator() {
         return new FootballStandingsComparator();
+    }
+
+    @Override
+    public League generateLeague(String name, int teamCount) {
+        return new FootballDataLoader().generateLeague(name, teamCount);
+    }
+
+    @Override
+    public AbstractMatch createMatch(Team home, Team away, MatchEventBus eventBus) {
+        return new FootballMatch(home, away, this, eventBus);
     }
 }

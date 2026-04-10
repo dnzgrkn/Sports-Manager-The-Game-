@@ -1,19 +1,27 @@
 package com.sportsmanager.app;
 
 import com.sportsmanager.core.*;
-import com.sportsmanager.sports.football.*;
 
 import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        FootballSport sport = new FootballSport();
-        SportRegistry.getInstance().register(sport);
+        // FootballSport'u reflection ile kaydet; app katmanı sports paketine direkt bağımlı olmaz
+        try {
+            Sport football = (Sport) Class
+                    .forName("com.sportsmanager.sports.football.FootballSport")
+                    .getDeclaredConstructor()
+                    .newInstance();
+            SportRegistry.getInstance().register(football);
+        } catch (Exception e) {
+            throw new IllegalStateException("Football sport could not be loaded", e);
+        }
+
+        Sport sport = SportRegistry.getInstance().get("Football");
 
         // 1. Create league
-        FootballDataLoader loader = new FootballDataLoader();
-        League league = loader.generateLeague("Süper Lig", 20);
+        League league = sport.generateLeague("Süper Lig", 20);
 
         System.out.println("=== Sports Manager — Milestone 2 Demo ===");
         System.out.println("League created: " + league.getTeams().size()
@@ -26,8 +34,8 @@ public class Main {
         List<Fixture> week1 = league.getFixturesForWeek(1);
 
         for (Fixture fixture : week1) {
-            FootballMatch match = new FootballMatch(
-                    fixture.getHomeTeam(), fixture.getAwayTeam(), sport, eventBus);
+            AbstractMatch match = sport.createMatch(
+                    fixture.getHomeTeam(), fixture.getAwayTeam(), eventBus);
             MatchResult result = match.play();
             fixture.setResult(result);
             league.updateStandings(fixture);
