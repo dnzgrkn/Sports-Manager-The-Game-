@@ -28,7 +28,9 @@ public class BasketballSport implements Sport {
 
     @Override
     public List<String> getTacticNames() {
-        return List.of("Man-to-Man", "Zone Defense", "Fast Break", "Post Up", "Pick and Roll");
+        return BasketballTactic.getAll().stream()
+                .map(BasketballTactic::getName)
+                .toList();
     }
 
     @Override
