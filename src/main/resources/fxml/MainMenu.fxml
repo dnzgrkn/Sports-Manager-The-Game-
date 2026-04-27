@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.sportsmanager.ui.controller.MainMenuController"
+      alignment="CENTER"
+      spacing="0"
+      style="-fx-background-color: #1a1a2e;"
+      prefWidth="900" prefHeight="700">
+
+    <!-- Top spacer -->
+    <Region prefHeight="100" VBox.vgrow="NEVER"/>
+
+    <!-- Title -->
+    <Label text="SPORTS MANAGER"
+           style="-fx-font-size: 52px;
+                  -fx-font-weight: bold;
+                  -fx-text-fill: #ffffff;
+                  -fx-font-family: 'Georgia';"/>
+
+    <!-- Accent bar -->
+    <Region prefHeight="4" prefWidth="260"
+            style="-fx-background-color: #e94560;"
+            maxWidth="260"/>
+
+    <Region prefHeight="48"/>
+
+    <!-- Sport label -->
+    <Label text="SPOR"
+           style="-fx-font-size: 11px;
+                  -fx-text-fill: #666688;
+                  -fx-font-family: 'Georgia';"
+           maxWidth="320" VBox.vgrow="NEVER"/>
+
+    <Region prefHeight="6"/>
+
+    <!-- Sport ComboBox -->
+    <ComboBox fx:id="sportComboBox"
+              prefWidth="320" prefHeight="42"
+              style="-fx-background-color: #16213e;
+                     -fx-border-color: #e94560;
+                     -fx-border-width: 1;
+                     -fx-text-fill: #ffffff;
+                     -fx-font-size: 14px;
+                     -fx-font-family: 'Georgia';
+                     -fx-background-radius: 0;
+                     -fx-border-radius: 0;"/>
+
+    <Region prefHeight="20"/>
+
+    <!-- Team name label -->
+    <Label text="TAKIM ADI (OPSİYONEL)"
+           style="-fx-font-size: 11px;
+                  -fx-text-fill: #666688;
+                  -fx-font-family: 'Georgia';"
+           maxWidth="320" VBox.vgrow="NEVER"/>
+
+    <Region prefHeight="6"/>
+
+    <!-- Team name TextField -->
+    <TextField fx:id="teamNameField"
+               promptText="Takım adınızı girin..."
+               prefWidth="320" prefHeight="42"
+               style="-fx-background-color: #16213e;
+                      -fx-border-color: #2a2a4e;
+                      -fx-border-width: 1;
+                      -fx-text-fill: #ffffff;
+                      -fx-prompt-text-fill: #444466;
+                      -fx-font-size: 14px;
+                      -fx-font-family: 'Georgia';
+                      -fx-background-radius: 0;
+                      -fx-border-radius: 0;
+                      -fx-padding: 0 12;"/>
+
+    <Region prefHeight="40"/>
+
+    <!-- New Game button -->
+    <Button text="YENİ OYUN"
+            onAction="#onNewGame"
+            prefWidth="320" prefHeight="50"
+            style="-fx-background-color: #e94560;
+                   -fx-text-fill: #ffffff;
+                   -fx-font-size: 16px;
+                   -fx-font-weight: bold;
+                   -fx-font-family: 'Georgia';
+                   -fx-background-radius: 0;
+                   -fx-cursor: hand;"/>
+
+    <Region prefHeight="10"/>
+
+    <!-- Load Game button -->
+    <Button text="OYUN YÜKLE"
+            onAction="#onLoadGame"
+            prefWidth="320" prefHeight="50"
+            style="-fx-background-color: #16213e;
+                   -fx-text-fill: #aaaacc;
+                   -fx-font-size: 14px;
+                   -fx-font-family: 'Georgia';
+                   -fx-border-color: #2a2a4e;
+                   -fx-border-width: 1;
+                   -fx-background-radius: 0;
+                   -fx-border-radius: 0;
+                   -fx-cursor: hand;"/>
+
+    <Region prefHeight="10"/>
+
+    <!-- Quit button -->
+    <Button text="ÇIKIŞ"
+            onAction="#onQuit"
+            prefWidth="320" prefHeight="40"
+            style="-fx-background-color: transparent;
+                   -fx-text-fill: #444466;
+                   -fx-font-size: 12px;
+                   -fx-font-family: 'Georgia';
+                   -fx-border-color: transparent;
+                   -fx-cursor: hand;"/>
+
+    <!-- Bottom spacer -->
+    <Region prefHeight="80" VBox.vgrow="NEVER"/>
+
+</VBox>
