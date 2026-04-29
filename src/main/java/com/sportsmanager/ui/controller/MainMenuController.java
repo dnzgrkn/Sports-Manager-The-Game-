@@ -4,7 +4,6 @@ import com.sportsmanager.app.GameSession;
 import com.sportsmanager.app.SportRegistry;
 import com.sportsmanager.core.Sport;
 import com.sportsmanager.core.Team;
-import com.sportsmanager.ui.Screen;
 import com.sportsmanager.ui.SceneNavigator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -77,7 +76,7 @@ public class MainMenuController {
         Optional<Team> result = dialog.showAndWait();
         result.ifPresent(team -> {
             GameSession.getInstance().setPlayerTeam(team);
-            SceneNavigator.getInstance().navigateTo(Screen.LEAGUE);
+            SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE);
         });
     }
 
