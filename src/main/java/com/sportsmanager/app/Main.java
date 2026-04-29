@@ -1,7 +1,6 @@
 package com.sportsmanager.app;
 
-import com.sportsmanager.sports.basketball.BasketballSport;
-import com.sportsmanager.sports.football.FootballSport;
+import com.sportsmanager.core.Sport;
 import com.sportsmanager.ui.SceneNavigator;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -14,8 +13,22 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        SportRegistry.getInstance().register(new FootballSport());
-        SportRegistry.getInstance().register(new BasketballSport());
+        String[] sports = {
+                "com.sportsmanager.sports.football.FootballSport",
+                "com.sportsmanager.sports.basketball.BasketballSport"
+        };
+
+        for (String className : sports) {
+            try {
+                Sport s = (Sport) Class.forName(className)
+                        .getDeclaredConstructor()
+                        .newInstance();
+                SportRegistry.getInstance().register(s);
+            } catch (ReflectiveOperationException e) {
+                throw new IllegalStateException("Could not load sport: " + className, e);
+            }
+        }
+
         launch();
     }
 }
