@@ -8,6 +8,8 @@ public class GameSession {
 
     private static GameSession instance;
 
+    private final GenerationService generationService = new GenerationService();
+
     private League activeLeague;
     private Team playerTeam;
     private Sport activeSport;
@@ -28,10 +30,10 @@ public class GameSession {
 
     public void startNewGame(Sport sport, String leagueName, int teamCount) {
         this.activeSport = sport;
-        this.currentWeek = 1;
+        this.currentWeek = 0;
 
-        // League oluşturma sport implementasyonuna devredilir; sports paketine direkt bağımlılık yok
-        this.activeLeague = sport.generateLeague(leagueName, teamCount);
+        this.activeLeague = generationService.createLeague(sport, leagueName, teamCount);
+        this.activeLeague.setCurrentWeek(0);
         this.playerTeam = activeLeague.getTeams().get(0);
     }
 
