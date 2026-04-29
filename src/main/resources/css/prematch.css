@@ -1,0 +1,138 @@
+/* ─── List View ───────────────────────────────────── */
+.list-view {
+    -fx-background-color: #0d0d1a;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.list-view .list-cell {
+    -fx-background-color: #0d0d1a;
+    -fx-text-fill: #eaeaea;
+    -fx-font-family: 'Courier New';
+    -fx-font-size: 12px;
+    -fx-padding: 0 10;
+    -fx-cell-size: 38px;
+    -fx-border-color: transparent transparent #16213e transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.list-view .list-cell:odd {
+    -fx-background-color: #0f0f1e;
+}
+
+.list-view .list-cell:selected {
+    -fx-background-color: #0f3460;
+}
+
+.list-view .list-cell:empty {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* ─── CheckBox inside list cells ─────────────────── */
+.check-box-list-cell .check-box {
+    -fx-font-family: 'Courier New';
+    -fx-font-size: 12px;
+    -fx-text-fill: #eaeaea;
+}
+
+.check-box-list-cell .check-box .box {
+    -fx-background-color: #16213e;
+    -fx-border-color: #0f3460;
+    -fx-border-width: 1;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-pref-width: 14;
+    -fx-pref-height: 14;
+}
+
+.check-box-list-cell .check-box:selected .box {
+    -fx-background-color: #e94560;
+    -fx-border-color: #e94560;
+}
+
+.check-box-list-cell .check-box .mark {
+    -fx-background-color: #ffffff;
+    -fx-padding: 3;
+}
+
+/* ─── ComboBox ────────────────────────────────────── */
+.combo-box {
+    -fx-background-color: #0f3460;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.combo-box .list-cell {
+    -fx-text-fill: #eaeaea;
+    -fx-font-family: 'Courier New';
+    -fx-font-size: 13px;
+    -fx-background-color: transparent;
+    -fx-padding: 0 12;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: #e94560;
+    -fx-background-radius: 0;
+}
+
+.combo-box .arrow {
+    -fx-background-color: #ffffff;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: #16213e;
+    -fx-border-color: #e94560;
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, #e94560, 10, 0.2, 0, 4);
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: #16213e;
+    -fx-text-fill: #eaeaea;
+    -fx-font-family: 'Courier New';
+    -fx-font-size: 13px;
+    -fx-padding: 8 14;
+    -fx-border-color: transparent transparent #0f3460 transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.combo-box-popup .list-view .list-cell:filled:hover {
+    -fx-background-color: #0f3460;
+    -fx-text-fill: #eaeaea;
+}
+
+.combo-box-popup .list-view .list-cell:filled:selected {
+    -fx-background-color: #e94560;
+    -fx-text-fill: #ffffff;
+}
+
+/* ─── Scroll Bars ─────────────────────────────────── */
+.scroll-bar {
+    -fx-background-color: #0d0d1a;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #0f3460;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #16213e;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: #16213e;
+    -fx-padding: 4;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: #eaeaea;
+    -fx-opacity: 0.3;
+}

@@ -1,4 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="700.0" prefWidth="900.0" />
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.sportsmanager.ui.controller.PreMatchController"
+            prefWidth="900" prefHeight="700"
+            style="-fx-background-color: #0d0d1a;">
+
+    <stylesheets>
+        <URL value="@../css/prematch.css"/>
+    </stylesheets>
+
+    <!-- ═══ TOP: Match header ════════════════════════════════ -->
+    <top>
+        <HBox alignment="CENTER" prefHeight="96"
+              style="-fx-background-color: #16213e;
+                     -fx-border-color: transparent transparent #e94560 transparent;
+                     -fx-border-width: 0 0 1 0;
+                     -fx-padding: 16 40;
+                     -fx-spacing: 20;">
+            <Label fx:id="homeTeamLabel" text="—"
+                   style="-fx-text-fill: #eaeaea;
+                          -fx-font-family: 'Impact';
+                          -fx-font-size: 42;"/>
+            <Label text="vs"
+                   style="-fx-text-fill: #eaeaea;
+                          -fx-font-family: 'Courier New';
+                          -fx-font-size: 16;
+                          -fx-font-weight: bold;
+                          -fx-opacity: 0.3;"/>
+            <Label fx:id="awayTeamLabel" text="—"
+                   style="-fx-text-fill: #e94560;
+                          -fx-font-family: 'Impact';
+                          -fx-font-size: 42;
+                          -fx-effect: dropshadow(gaussian, #e94560, 20, 0.3, 0, 0);"/>
+        </HBox>
+    </top>
+
+    <!-- ═══ CENTER: Squad picker + Tactic panel ══════════════ -->
+    <center>
+        <HBox>
+
+            <!-- Left: squad selection -->
+            <VBox HBox.hgrow="ALWAYS"
+                  style="-fx-background-color: #0d0d1a;
+                         -fx-padding: 26 28;
+                         -fx-border-color: transparent #e94560 transparent transparent;
+                         -fx-border-width: 0 1 0 0;">
+                <Label text="KADRO SEÇ"
+                       style="-fx-text-fill: #e94560;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 13;
+                              -fx-font-weight: bold;"/>
+                <Region prefHeight="4"/>
+                <Label fx:id="squadSizeHintLabel" text=""
+                       style="-fx-text-fill: #eaeaea;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 10;
+                              -fx-opacity: 0.32;"/>
+                <Region prefHeight="14"/>
+                <ListView fx:id="playerListView" VBox.vgrow="ALWAYS"/>
+                <Region prefHeight="12"/>
+                <Label fx:id="selectionCountLabel" text="0 / 0 seçildi"
+                       style="-fx-text-fill: #e94560;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 12;
+                              -fx-font-weight: bold;"/>
+            </VBox>
+
+            <!-- Right: tactic panel -->
+            <VBox prefWidth="300"
+                  style="-fx-background-color: #16213e;
+                         -fx-padding: 26 26;">
+
+                <Label text="TAKTİK"
+                       style="-fx-text-fill: #e94560;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 13;
+                              -fx-font-weight: bold;"/>
+                <Region prefHeight="14"/>
+
+                <ComboBox fx:id="tacticComboBox"
+                          prefWidth="248" prefHeight="42"
+                          onAction="#onTacticChanged"/>
+
+                <Region prefHeight="36"/>
+
+                <!-- Modifier display -->
+                <Label text="MODİFİYERLER"
+                       style="-fx-text-fill: #eaeaea;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 9;
+                              -fx-font-weight: bold;
+                              -fx-opacity: 0.3;"/>
+                <Region prefHeight="14"/>
+
+                <Label text="ATAK"
+                       style="-fx-text-fill: #eaeaea;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 10;
+                              -fx-opacity: 0.45;"/>
+                <Label fx:id="attackModLabel" text="—"
+                       style="-fx-text-fill: #e94560;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 34;
+                              -fx-font-weight: bold;
+                              -fx-effect: dropshadow(gaussian, #e94560, 12, 0.35, 0, 0);"/>
+
+                <Region prefHeight="22"/>
+
+                <Label text="SAVUNMA"
+                       style="-fx-text-fill: #eaeaea;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 10;
+                              -fx-opacity: 0.45;"/>
+                <Label fx:id="defenseModLabel" text="—"
+                       style="-fx-text-fill: #4a9eff;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 34;
+                              -fx-font-weight: bold;
+                              -fx-effect: dropshadow(gaussian, #4a9eff, 12, 0.3, 0, 0);"/>
+
+                <Region VBox.vgrow="ALWAYS"/>
+            </VBox>
+
+        </HBox>
+    </center>
+
+    <!-- ═══ BOTTOM: Action button ════════════════════════════ -->
+    <bottom>
+        <HBox alignment="CENTER" prefHeight="80"
+              style="-fx-background-color: #16213e;
+                     -fx-border-color: #e94560 transparent transparent transparent;
+                     -fx-border-width: 1 0 0 0;
+                     -fx-padding: 14 40;">
+            <Button text="▶   MAÇA BAŞLA" onAction="#onStartMatch"
+                    prefWidth="400" prefHeight="48"
+                    style="-fx-background-color: #e94560;
+                           -fx-text-fill: #ffffff;
+                           -fx-font-family: 'Courier New';
+                           -fx-font-size: 16;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 0;
+                           -fx-cursor: hand;
+                           -fx-effect: dropshadow(gaussian, #e94560, 28, 0.45, 0, 6);"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

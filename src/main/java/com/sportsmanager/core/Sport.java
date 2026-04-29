@@ -13,6 +13,10 @@ public interface Sport {
     PlayerAttributeSchema getAttributeSchema();
     List<String> getTacticNames();
 
+    default List<Tactic> getTactics() {
+        return getTacticNames().stream().map(Tactic::new).toList();
+    }
+
     /** League oluşturmayı sport implementasyonuna devreder; app katmanı DataLoader'a bağımlı olmaz. */
     League generateLeague(String name, int teamCount);
 

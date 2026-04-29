@@ -47,6 +47,11 @@ public class BasketballSport implements Sport {
     }
 
     @Override
+    public List<Tactic> getTactics() {
+        return List.copyOf(BasketballTactic.getAll());
+    }
+
+    @Override
     public AbstractMatch createMatch(Team home, Team away, MatchEventBus eventBus) {
         throw new UnsupportedOperationException("Basketball match creation not implemented yet");
     }

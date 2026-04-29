@@ -57,6 +57,11 @@ public class FootballSport implements Sport {
     }
 
     @Override
+    public List<Tactic> getTactics() {
+        return List.copyOf(FootballTactic.getAll());
+    }
+
+    @Override
     public AbstractMatch createMatch(Team home, Team away, MatchEventBus eventBus) {
         return new FootballMatch(home, away, this, eventBus);
     }
