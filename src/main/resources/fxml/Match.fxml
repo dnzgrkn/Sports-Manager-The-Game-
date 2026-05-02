@@ -1,4 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="700.0" prefWidth="900.0" />
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.sportsmanager.ui.controller.MatchController"
+            prefWidth="900" prefHeight="700"
+            style="-fx-background-color: #0a0a18;">
+
+    <stylesheets>
+        <URL value="@../css/match.css"/>
+    </stylesheets>
+
+    <!-- ═══ TOP: Live scoreboard ════════════════════════════ -->
+    <top>
+        <HBox alignment="CENTER_LEFT" prefHeight="90"
+              style="-fx-background-color: linear-gradient(to bottom, #1a1a3e, #0d0d1a);
+                     -fx-border-color: transparent transparent #e94560 transparent;
+                     -fx-border-width: 0 0 2 0;
+                     -fx-padding: 0 36;">
+
+            <VBox alignment="CENTER_LEFT" prefWidth="200">
+                <Label text="CANLI MAÇ"
+                       style="-fx-text-fill: #e94560;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 9px;
+                              -fx-font-weight: bold;
+                              -fx-opacity: 0.7;"/>
+                <Label fx:id="periodLabel" text="Periyot — / —"
+                       style="-fx-text-fill: #eaeaea;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 14px;
+                              -fx-font-weight: bold;"/>
+            </VBox>
+
+            <HBox HBox.hgrow="ALWAYS" alignment="CENTER">
+                <Label fx:id="scoreLabel" text="— vs —"
+                       style="-fx-text-fill: #ffffff;
+                              -fx-font-family: 'Impact';
+                              -fx-font-size: 46px;
+                              -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.2), 12, 0.2, 0, 0);"/>
+            </HBox>
+
+            <Label text="● CANLI" prefWidth="120"
+                   styleClass="live-badge"/>
+
+        </HBox>
+    </top>
+
+    <!-- ═══ CENTER: Event log ════════════════════════════════ -->
+    <center>
+        <ListView fx:id="eventLogView" styleClass="event-log"/>
+    </center>
+
+    <!-- ═══ BOTTOM: Period end panel (hidden initially) ══════ -->
+    <bottom>
+        <VBox fx:id="periodEndPanel" styleClass="period-panel"
+              visible="false" managed="false">
+
+            <HBox alignment="CENTER_LEFT" spacing="16">
+                <Label fx:id="periodEndLabel" text="Periyot Sonu"
+                       style="-fx-text-fill: #f59e0b;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 18px;
+                              -fx-font-weight: bold;
+                              -fx-effect: dropshadow(gaussian, #f59e0b, 14, 0.3, 0, 0);"/>
+                <Label text="— DEĞİŞİKLİK YAPABİLİRSİNİZ —"
+                       style="-fx-text-fill: #eaeaea;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 9px;
+                              -fx-opacity: 0.3;"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="12"
+                  style="-fx-padding: 10 0 14 0;">
+                <Label text="DEĞİŞİKLİK"
+                       style="-fx-text-fill: #eaeaea;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 9px;
+                              -fx-font-weight: bold;
+                              -fx-opacity: 0.35;
+                              -fx-pref-width: 74;"/>
+                <ComboBox fx:id="outPlayerCombo"
+                          promptText="Çıkacak oyuncu"
+                          prefWidth="220" prefHeight="38"
+                          styleClass="sub-combo"/>
+                <Label text="→"
+                       style="-fx-text-fill: #f59e0b;
+                              -fx-font-family: 'Courier New';
+                              -fx-font-size: 18px;
+                              -fx-font-weight: bold;"/>
+                <ComboBox fx:id="inPlayerCombo"
+                          promptText="Girecek oyuncu"
+                          prefWidth="220" prefHeight="38"
+                          styleClass="sub-combo"/>
+                <Button text="Değişiklik Yap" onAction="#onSubstitute"
+                        prefHeight="38" styleClass="sub-button"/>
+            </HBox>
+
+            <HBox alignment="CENTER_RIGHT">
+                <Button text="Devam Et  →" onAction="#onContinue"
+                        prefWidth="200" prefHeight="46"
+                        styleClass="continue-button"/>
+            </HBox>
+
+        </VBox>
+    </bottom>
+
+</BorderPane>
