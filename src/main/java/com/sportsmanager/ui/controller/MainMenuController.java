@@ -1,6 +1,7 @@
 package com.sportsmanager.ui.controller;
 
 import com.sportsmanager.app.GameSession;
+import com.sportsmanager.app.SaveLoadService;
 import com.sportsmanager.app.SportRegistry;
 import com.sportsmanager.core.Sport;
 import com.sportsmanager.core.Team;
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Optional;
 
 public class MainMenuController {
+
+    private final SaveLoadService saveLoadService = new SaveLoadService();
 
     @FXML private ComboBox<String> sportComboBox;
     @FXML private TextField teamNameField;
@@ -82,7 +85,28 @@ public class MainMenuController {
 
     @FXML
     public void onLoadGame() {
-        showAlert(Alert.AlertType.INFORMATION, "Bilgi", "Yakında");
+        List<String> saves = saveLoadService.listSaves();
+        if (saves.isEmpty()) {
+            showAlert(Alert.AlertType.INFORMATION, "Bilgi", "Kayıtlı oyun bulunamadı.");
+            return;
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(saves.get(0), saves);
+        dialog.setTitle("Oyun Yükle");
+        dialog.setHeaderText("Yüklenecek kaydı seçin:");
+        dialog.setContentText("Kayıt:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isEmpty()) {
+            return;
+        }
+
+        try {
+            saveLoadService.loadGame(result.get());
+            SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE);
+        } catch (RuntimeException e) {
+            showAlert(Alert.AlertType.ERROR, "Hata", "Kayıt yüklenemedi: " + e.getMessage());
+        }
     }
 
     @FXML

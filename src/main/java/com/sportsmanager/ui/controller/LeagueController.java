@@ -2,6 +2,7 @@ package com.sportsmanager.ui.controller;
 
 import com.sportsmanager.app.GameSession;
 import com.sportsmanager.app.LeagueOrchestrator;
+import com.sportsmanager.app.SaveLoadService;
 import com.sportsmanager.core.Fixture;
 import com.sportsmanager.core.League;
 import com.sportsmanager.core.LeagueRecord;
@@ -14,15 +15,18 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextInputDialog;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class LeagueController {
@@ -45,6 +49,7 @@ public class LeagueController {
     @FXML private ListView<Fixture> fixtureList;
     @FXML private ListView<Player>  squadList;
 
+    private final SaveLoadService saveLoadService = new SaveLoadService();
     private LeagueOrchestrator orchestrator;
 
     @FXML
@@ -154,6 +159,53 @@ public class LeagueController {
         alert.showAndWait();
     }
 
+    @FXML
+    public void onSaveGame() {
+        TextInputDialog dialog = new TextInputDialog("save-" + System.currentTimeMillis());
+        dialog.setTitle("Oyunu Kaydet");
+        dialog.setHeaderText("Kayıt adı girin:");
+        dialog.setContentText("Kayıt:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isEmpty()) {
+            return;
+        }
+
+        try {
+            saveLoadService.saveGame(result.get());
+            showAlert(Alert.AlertType.INFORMATION, "Bilgi", "Oyun kaydedildi.");
+        } catch (RuntimeException e) {
+            showAlert(Alert.AlertType.ERROR, "Hata", "Kayıt başarısız: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    public void onLoadGame() {
+        List<String> saves = saveLoadService.listSaves();
+        if (saves.isEmpty()) {
+            showAlert(Alert.AlertType.INFORMATION, "Bilgi", "Kayıtlı oyun bulunamadı.");
+            return;
+        }
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(saves.get(0), saves);
+        dialog.setTitle("Oyunu Yükle");
+        dialog.setHeaderText("Yüklenecek kaydı seçin:");
+        dialog.setContentText("Kayıt:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isEmpty()) {
+            return;
+        }
+
+        try {
+            saveLoadService.loadGame(result.get());
+            orchestrator = new LeagueOrchestrator();
+            refreshAll();
+        } catch (RuntimeException e) {
+            showAlert(Alert.AlertType.ERROR, "Hata", "Kayıt yüklenemedi: " + e.getMessage());
+        }
+    }
+
     public void refreshAll() {
         GameSession session = GameSession.getInstance();
         League league = session.getActiveLeague();
@@ -193,5 +245,13 @@ public class LeagueController {
                     return f.getHomeTeam() != null ? f.getHomeTeam().getName() : "BYE";
                 })
                 .orElse("Sezon bitti");
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }
