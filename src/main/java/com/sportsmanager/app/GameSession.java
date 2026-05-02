@@ -14,6 +14,7 @@ public class GameSession {
     private Team playerTeam;
     private Sport activeSport;
     private int currentWeek;
+    private int lastTrainedWeek = -1;
 
     private GameSession() {}
 
@@ -31,6 +32,7 @@ public class GameSession {
     public void startNewGame(Sport sport, String leagueName, int teamCount) {
         this.activeSport = sport;
         this.currentWeek = 0;
+        this.lastTrainedWeek = -1;
 
         this.activeLeague = generationService.createLeague(sport, leagueName, teamCount);
         this.activeLeague.setCurrentWeek(0);
@@ -48,4 +50,7 @@ public class GameSession {
 
     public int getCurrentWeek()                  { return currentWeek; }
     public void setCurrentWeek(int week)         { this.currentWeek = week; }
+
+    public int getLastTrainedWeek()              { return lastTrainedWeek; }
+    public void setLastTrainedWeek(int week)     { this.lastTrainedWeek = week; }
 }
