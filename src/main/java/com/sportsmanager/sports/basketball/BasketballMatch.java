@@ -40,7 +40,7 @@ public class BasketballMatch extends AbstractMatch {
         double awayAvgRating = averageRating(awayLineup);
         double injuryProb = sport.getMatchRules().getInjuryProbability();
 
-        for (int tick = 0; tick < 10; tick++) {
+        for (int tick = 0; tick < 20; tick++) {
             // 1. Calculate Possession
             double homeAttack = homeTactic.getAttackMod() * homeAvgRating;
             double awayAttack = awayTactic.getAttackMod() * awayAvgRating;
@@ -48,8 +48,8 @@ public class BasketballMatch extends AbstractMatch {
             double homePossessionChance = homeAttack / (homeAttack + awayAttack);
             boolean isHomeAttacking = random.nextDouble() < homePossessionChance;
 
-            // 2. Shot attempt (random < 0.35)
-            if (random.nextDouble() < 0.35) {
+            // 2. Shot attempt (random < 0.90 — most possessions end in a shot)
+            if (random.nextDouble() < 0.90) {
                 // 3. Determine shot type and scoring
                 double shotRand = random.nextDouble();
                 if (shotRand < 0.30) {
