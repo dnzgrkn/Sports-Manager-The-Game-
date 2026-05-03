@@ -39,7 +39,9 @@ public class BasketballSport implements Sport {
     }
 
     @Override
-    public StandingsComparator getStandingsComparator() { return null; }
+    public StandingsComparator getStandingsComparator() {
+        return new BasketballStandingsComparator();
+    }
 
     @Override
     public League generateLeague(String name, int teamCount) {
