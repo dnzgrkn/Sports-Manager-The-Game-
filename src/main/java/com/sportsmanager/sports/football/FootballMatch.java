@@ -105,6 +105,13 @@ public class FootballMatch extends AbstractMatch {
                     eventBus.publish(new InjuryEvent(p.getName(), gamesMissed));
                 }
             }
+
+            try {
+                Thread.sleep(15);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
         }
     }
 
