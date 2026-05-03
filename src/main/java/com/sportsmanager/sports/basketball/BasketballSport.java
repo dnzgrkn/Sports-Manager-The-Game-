@@ -35,15 +35,25 @@ public class BasketballSport implements Sport {
 
     @Override
     public PlayerAttributeSchema getAttributeSchema() {
-        return new PlayerAttributeSchema();
+        PlayerAttributeSchema schema = new PlayerAttributeSchema();
+        schema.addAttribute("shooting", 40, 99);
+        schema.addAttribute("passing", 30, 99);
+        schema.addAttribute("dribbling", 30, 99);
+        schema.addAttribute("defending", 20, 99);
+        schema.addAttribute("rebounding", 20, 99);
+        schema.addAttribute("speed", 40, 99);
+        schema.addAttribute("stamina", 40, 99);
+        return schema;
     }
 
     @Override
-    public StandingsComparator getStandingsComparator() { return null; }
+    public StandingsComparator getStandingsComparator() {
+        return new BasketballStandingsComparator();
+    }
 
     @Override
     public League generateLeague(String name, int teamCount) {
-        throw new UnsupportedOperationException("Basketball league generation not implemented yet");
+        return new BasketballDataLoader(this).generateLeague(name, teamCount);
     }
 
     @Override
@@ -53,6 +63,6 @@ public class BasketballSport implements Sport {
 
     @Override
     public AbstractMatch createMatch(Team home, Team away, MatchEventBus eventBus) {
-        throw new UnsupportedOperationException("Basketball match creation not implemented yet");
+        return new BasketballMatch(home, away, this, eventBus);
     }
 }
