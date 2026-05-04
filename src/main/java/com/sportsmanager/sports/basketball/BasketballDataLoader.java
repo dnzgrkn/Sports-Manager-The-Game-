@@ -43,9 +43,23 @@ public class BasketballDataLoader {
     private Player createPositionedPlayer(String role, String teamName) {
         PlayerAttributeSchema schema = basketballSport.getAttributeSchema();
 
+        List<String> firstNames = Arrays.asList(
+            "Ahmet", "Mehmet", "Ali", "Mustafa", "Emre", "Burak", "Kerem",
+            "Serhat", "Okan", "Arda", "Hakan", "Volkan", "Mert", "Kaan",
+            "Yusuf", "Enes", "Umut", "Furkan", "Berkay", "Taner",
+            "Ayşe", "Fatma", "Zeynep", "Elif", "Selin", "Deniz", "Ceren",
+            "Büşra", "Merve", "Nazlı"
+        );
+        List<String> lastNames = Arrays.asList(
+            "Yılmaz", "Kaya", "Demir", "Şahin", "Çelik", "Yıldız", "Güneş",
+            "Arslan", "Doğan", "Aydın", "Özdemir", "Koç", "Kurt", "Polat",
+            "Bulut", "Tekin", "Çetin", "Erdoğan", "Kaplan", "Bozkurt"
+        );
+        String name = firstNames.get(random.nextInt(firstNames.size()))
+                    + " " + lastNames.get(random.nextInt(lastNames.size()));
 
         int age = 19 + random.nextInt(16);
-        BasketballPlayer player = new BasketballPlayer("Player " + role + " - " + teamName, age, role);
+        BasketballPlayer player = new BasketballPlayer(name, age, role);
 
         Map<String, Integer> attributes = new HashMap<>();
         for (String attrName : schema.getAttributeNames()) {

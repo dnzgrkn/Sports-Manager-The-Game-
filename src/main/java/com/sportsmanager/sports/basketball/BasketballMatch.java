@@ -31,10 +31,12 @@ public class BasketballMatch extends AbstractMatch {
         List<Player> homeLineup = homeTeam.getStartingLineup(squadSize);
         List<Player> awayLineup = awayTeam.getStartingLineup(squadSize);
 
-        BasketballTactic homeTactic = (BasketballTactic) homeTeam.getActiveTactic();
-        BasketballTactic awayTactic = (BasketballTactic) awayTeam.getActiveTactic();
-
-        if (homeTactic == null || awayTactic == null) return;
+        Tactic homeTacticRaw = homeTeam.getActiveTactic();
+        Tactic awayTacticRaw = awayTeam.getActiveTactic();
+        BasketballTactic homeTactic = (homeTacticRaw instanceof BasketballTactic bt)
+                ? bt : BasketballTactic.getAll().get(0);
+        BasketballTactic awayTactic = (awayTacticRaw instanceof BasketballTactic bt)
+                ? bt : BasketballTactic.getAll().get(0);
 
         double homeAvgRating = averageRating(homeLineup);
         double awayAvgRating = averageRating(awayLineup);
