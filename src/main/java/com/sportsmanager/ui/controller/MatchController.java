@@ -26,6 +26,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -199,10 +200,16 @@ public class MatchController {
     }
 
     private void refreshSubstitutionCombos() {
-        List<Player> starters = playerTeam.getStartingLineup(squadSize);
-        List<Player> bench = playerTeam.getAvailablePlayers().stream()
-                .filter(p -> !starters.contains(p))
+        List<Player> squad = playerTeam.getSquad();
+        int starterCount = Math.min(squadSize, squad.size());
+
+        // Starters: fixed squad positions 0..starterCount-1 (set by PreMatch reordering)
+        List<Player> starters = new ArrayList<>(squad.subList(0, starterCount));
+        // Bench: remaining squad positions, only those still available (uninjured)
+        List<Player> bench = squad.subList(starterCount, squad.size()).stream()
+                .filter(Player::isAvailable)
                 .toList();
+
         outPlayerCombo.setItems(FXCollections.observableArrayList(starters));
         inPlayerCombo.setItems(FXCollections.observableArrayList(bench));
         outPlayerCombo.setValue(null);
