@@ -7,8 +7,6 @@ import com.sportsmanager.core.Player;
 import com.sportsmanager.core.Sport;
 import com.sportsmanager.core.Tactic;
 import com.sportsmanager.core.Team;
-import com.sportsmanager.sports.basketball.BasketballTactic;
-import com.sportsmanager.sports.football.FootballTactic;
 import com.sportsmanager.ui.SceneNavigator;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -164,13 +162,12 @@ public class PreMatchController {
             defenseModLabel.setText("—");
             return;
         }
-        if (tactic instanceof FootballTactic ft) {
-            attackModLabel.setText(String.format("× %.2f", ft.getAttackMod()));
-            defenseModLabel.setText(String.format("× %.2f", ft.getDefenseMod()));
-        } else if (tactic instanceof BasketballTactic bt) {
-            attackModLabel.setText(String.format("× %.2f", bt.getAttackMod()));
-            defenseModLabel.setText(String.format("× %.2f", bt.getDefenseMod()));
-        } else {
+        try {
+            double attack  = (double) tactic.getClass().getMethod("getAttackMod").invoke(tactic);
+            double defense = (double) tactic.getClass().getMethod("getDefenseMod").invoke(tactic);
+            attackModLabel.setText(String.format("× %.2f", attack));
+            defenseModLabel.setText(String.format("× %.2f", defense));
+        } catch (Exception e) {
             attackModLabel.setText("—");
             defenseModLabel.setText("—");
         }
