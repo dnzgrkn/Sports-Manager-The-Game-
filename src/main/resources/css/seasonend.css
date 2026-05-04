@@ -1,0 +1,93 @@
+/* ─── Root ─────────────────────────────────────────── */
+.root {
+    -fx-background-color: linear-gradient(to bottom, #111428 0%, #0d0d1a 45%);
+}
+
+/* ─── Table View ──────────────────────────────────── */
+.table-view {
+    -fx-background-color: #0d0d1a;
+    -fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-color: #16213e;
+    -fx-border-width: 1;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #0f3460;
+    -fx-background-insets: 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-size: 36;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #e94560;
+    -fx-font-family: 'Courier New';
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+}
+
+.table-view .filler {
+    -fx-background-color: #0f3460;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #0d0d1a;
+    -fx-border-color: transparent transparent #16213e transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-cell-size: 38px;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #0f0f1e;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #0f3460;
+}
+
+.table-view .table-row-cell .table-cell {
+    -fx-text-fill: #eaeaea;
+    -fx-font-family: 'Courier New';
+    -fx-font-size: 13px;
+    -fx-alignment: CENTER;
+    -fx-padding: 0 8;
+}
+
+.table-view .table-row-cell:selected .table-cell {
+    -fx-text-fill: #eaeaea;
+}
+
+/* ─── Scroll Bars ─────────────────────────────────── */
+.scroll-bar {
+    -fx-background-color: #0d0d1a;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #0f3460;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #16213e;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: #16213e;
+    -fx-padding: 4;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: #eaeaea;
+    -fx-opacity: 0.3;
+}
