@@ -16,6 +16,7 @@
            style="-fx-background-color: #0d0d1a;">
 
     <stylesheets>
+        <URL value="@../css/theme.css"/>
         <URL value="@../css/seasonend.css"/>
     </stylesheets>
 

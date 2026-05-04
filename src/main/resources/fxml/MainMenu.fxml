@@ -11,10 +11,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 
+<?import java.net.URL?>
 <StackPane xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.sportsmanager.ui.controller.MainMenuController"
            prefWidth="900" prefHeight="700"
            style="-fx-background-color: #0d0d1a;">
+
+    <stylesheets>
+        <URL value="@../css/theme.css"/>
+    </stylesheets>
 
     <!-- Decorative background layer -->
     <Pane mouseTransparent="true" prefWidth="900" prefHeight="700">

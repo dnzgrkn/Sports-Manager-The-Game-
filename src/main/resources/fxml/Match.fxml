@@ -16,6 +16,7 @@
             style="-fx-background-color: #0a0a18;">
 
     <stylesheets>
+        <URL value="@../css/theme.css"/>
         <URL value="@../css/match.css"/>
     </stylesheets>
 
