@@ -50,7 +50,7 @@ public class FootballMatch extends AbstractMatch {
         double homeAvgRating = averageRating(homeLineup);
         double awayAvgRating = averageRating(awayLineup);
 
-        double injuryProb = 0.001; // reduced injury rate for realistic simulation
+        double injuryProb = 0.0003; // reduced injury rate for realistic simulation
 
         for (int tick = 0; tick < 45; tick++) {
             int minute = periodIndex * 45 + tick + 1;

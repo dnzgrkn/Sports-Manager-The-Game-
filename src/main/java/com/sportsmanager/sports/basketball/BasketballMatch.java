@@ -40,7 +40,7 @@ public class BasketballMatch extends AbstractMatch {
 
         double homeAvgRating = averageRating(homeLineup);
         double awayAvgRating = averageRating(awayLineup);
-        double injuryProb = sport.getMatchRules().getInjuryProbability();
+        double injuryProb = 0.0003;
 
         for (int tick = 0; tick < 20; tick++) {
             // 1. Calculate Possession
