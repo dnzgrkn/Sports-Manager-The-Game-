@@ -21,4 +21,8 @@ public class MatchEventBus {
             listener.accept(event);
         }
     }
+
+    public boolean hasListeners() {
+        return !listeners.isEmpty();
+    }
 }
