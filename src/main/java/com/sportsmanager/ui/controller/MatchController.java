@@ -2,6 +2,7 @@ package com.sportsmanager.ui.controller;
 
 import com.sportsmanager.app.GameSession;
 import com.sportsmanager.app.MatchOrchestrator;
+import com.sportsmanager.core.AbstractMatch;
 import com.sportsmanager.core.Fixture;
 import com.sportsmanager.core.GoalEvent;
 import com.sportsmanager.core.InjuryEvent;
@@ -57,6 +58,7 @@ public class MatchController {
     private int homePoss = 50;
     private int awayPoss = 50;
     private boolean matchFinished = false;
+    private int matchWeek;
 
     @FXML
     public void initialize() {
@@ -72,6 +74,10 @@ public class MatchController {
                           || f.getAwayTeam().getId().equals(playerTeam.getId()))
                 .findFirst()
                 .orElse(null);
+
+        if (fixture != null) {
+            matchWeek = fixture.getWeekNumber();
+        }
 
         if (fixture == null) {
             Platform.runLater(() -> SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE));
@@ -132,21 +138,51 @@ public class MatchController {
         if (matchFinished) {
             periodEndPanel.setVisible(false);
             periodEndPanel.setManaged(false);
+            periodPause.release(); // maç thread'ini serbest bırak
+
             Task<Void> task = new Task<>() {
                 @Override
                 protected Void call() {
-                    new com.sportsmanager.app.LeagueOrchestrator()
-                            .completeWeekAfterPlayerMatch();
+                    League league = GameSession.getInstance().getActiveLeague();
+                    Team playerTeam = GameSession.getInstance().getPlayerTeam();
+                    int currentWeek = matchWeek; // maçın oynandığı hafta
+
+                    // Bu haftanın oynanmamış AI maçlarını simüle et
+                    for (Fixture f : league.getFixturesForWeek(currentWeek)) {
+                        boolean isPlayerFixture =
+                            f.getHomeTeam().getId().equals(playerTeam.getId()) ||
+                            f.getAwayTeam().getId().equals(playerTeam.getId());
+                        if (!isPlayerFixture && !f.isPlayed()) {
+                            AbstractMatch match = GameSession.getInstance()
+                                .getActiveSport()
+                                .createMatch(f.getHomeTeam(), f.getAwayTeam(),
+                                    new MatchEventBus());
+                            MatchResult result = match.play();
+                            f.setResult(result);
+                            league.updateStandings(f);
+                        }
+                    }
+
+                    // Yaralanmaları azalt
+                    for (Team team : league.getTeams()) {
+                        for (Player p : team.getSquad()) {
+                            p.decrementInjury();
+                        }
+                    }
+
                     return null;
                 }
             };
+
             task.setOnSucceeded(e ->
                 SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE));
             task.setOnFailed(e ->
                 task.getException().printStackTrace());
+
             Thread t = new Thread(task);
             t.setDaemon(true);
             t.start();
+
         } else {
             periodEndPanel.setVisible(false);
             periodEndPanel.setManaged(false);
