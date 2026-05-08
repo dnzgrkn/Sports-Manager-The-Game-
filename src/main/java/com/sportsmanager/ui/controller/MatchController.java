@@ -144,8 +144,9 @@ public class MatchController {
         switch (event.getType()) {
             case GOAL -> {
                 GoalEvent g = (GoalEvent) event;
-                boolean isHomeGoal = fixture.getHomeTeam().getSquad().stream()
-                        .anyMatch(p -> p.getName().equals(g.getScorerName()));
+                String desc = g.getDescription();
+                String homeName = fixture.getHomeTeam().getName();
+                boolean isHomeGoal = desc.contains("(" + homeName + ")");
                 if (isHomeGoal) liveHome++; else liveAway++;
 
                 if (isHomeGoal) {
