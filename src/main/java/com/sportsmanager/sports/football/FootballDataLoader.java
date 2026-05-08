@@ -45,12 +45,12 @@ public class FootballDataLoader {
             String logo = "logo" + (i % 10 + 1) + ".png";
             Team team = new Team(teamName, logo);
 
-            // 11 starters: 1 GK, 4 DEF, 4 MID, 2 CF
+            // 15 starters: 2 GK, 5 DEF (CB/LB/RB), 5 MID (CM/LM/RM), 3 CF
             for (String pos : starterPositions()) {
                 team.addPlayer(createPlayer(pos, schema));
             }
-            // 4 random substitutes
-            for (int s = 0; s < 4; s++) {
+            // 5 random substitutes
+            for (int s = 0; s < 5; s++) {
                 String pos = ALL_POSITIONS[random.nextInt(ALL_POSITIONS.length)];
                 team.addPlayer(createPlayer(pos, schema));
             }
@@ -65,7 +65,7 @@ public class FootballDataLoader {
     }
 
     private List<String> starterPositions() {
-        return List.of("GK", "CB", "CB", "LB", "RB", "CM", "CM", "LM", "RM", "CF", "CF");
+        return List.of("GK", "GK", "CB", "CB", "LB", "RB", "CB", "CM", "CM", "LM", "RM", "CM", "CF", "CF", "CF");
     }
 
     private FootballPlayer createPlayer(String position, PlayerAttributeSchema schema) {
