@@ -90,15 +90,42 @@ public class MainMenuController {
             return;
         }
 
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(saves.get(0), saves);
+        Dialog<String> dialog = new Dialog<>();
         dialog.setTitle("Oyun Yükle");
         dialog.setHeaderText("Yüklenecek kaydı seçin:");
-        dialog.setContentText("Kayıt:");
+
+        ButtonType loadButton   = new ButtonType("Yükle", ButtonBar.ButtonData.OK_DONE);
+        ButtonType deleteButton = new ButtonType("Sil",   ButtonBar.ButtonData.OTHER);
+        dialog.getDialogPane().getButtonTypes().addAll(loadButton, deleteButton, ButtonType.CANCEL);
+
+        ListView<String> listView = new ListView<>(FXCollections.observableArrayList(saves));
+        listView.getSelectionModel().selectFirst();
+        listView.setPrefHeight(260);
+        listView.setPrefWidth(340);
+        dialog.getDialogPane().setContent(listView);
+
+        // Disable load/delete when nothing selected
+        Button loadBtn = (Button) dialog.getDialogPane().lookupButton(loadButton);
+        Button delBtn  = (Button) dialog.getDialogPane().lookupButton(deleteButton);
+        loadBtn.disableProperty().bind(listView.getSelectionModel().selectedItemProperty().isNull());
+        delBtn.disableProperty().bind(listView.getSelectionModel().selectedItemProperty().isNull());
+
+        delBtn.setOnAction(e -> {
+            String selected = listView.getSelectionModel().getSelectedItem();
+            if (selected == null) return;
+            try {
+                saveLoadService.deleteSave(selected);
+                listView.getItems().remove(selected);
+                listView.getSelectionModel().selectFirst();
+            } catch (RuntimeException ex) {
+                showAlert(Alert.AlertType.ERROR, "Hata", "Save silinemedi: " + ex.getMessage());
+            }
+        });
+
+        dialog.setResultConverter(bt -> bt == loadButton ? listView.getSelectionModel().getSelectedItem() : null);
 
         Optional<String> result = dialog.showAndWait();
-        if (result.isEmpty()) {
-            return;
-        }
+        if (result.isEmpty()) return;
 
         try {
             saveLoadService.loadGame(result.get());

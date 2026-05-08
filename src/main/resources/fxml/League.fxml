@@ -86,6 +86,19 @@
                            -fx-font-weight: bold;
                            -fx-background-radius: 0;
                            -fx-cursor: hand;"/>
+            <Region prefHeight="10"/>
+            <Button text="ANA MENÜYE DÖN" onAction="#onBackToMainMenu"
+                    prefWidth="160" prefHeight="38"
+                    style="-fx-background-color: transparent;
+                           -fx-text-fill: #eaeaea;
+                           -fx-font-family: 'Courier New';
+                           -fx-font-size: 11;
+                           -fx-font-weight: bold;
+                           -fx-background-radius: 0;
+                           -fx-cursor: hand;
+                           -fx-border-color: #e94560;
+                           -fx-border-width: 1;
+                           -fx-opacity: 0.7;"/>
 
             <Region prefHeight="32"/>
 

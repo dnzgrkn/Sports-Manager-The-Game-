@@ -96,6 +96,15 @@ public class SaveLoadService {
         }
     }
 
+    public void deleteSave(String saveName) {
+        validateSaveName(saveName);
+        try {
+            Files.deleteIfExists(resolveSavePath(saveName));
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not delete save: " + saveName, e);
+        }
+    }
+
     private void normalizeLoadedSession(GameSession session) {
         League league = session.getActiveLeague();
         if (league == null) {

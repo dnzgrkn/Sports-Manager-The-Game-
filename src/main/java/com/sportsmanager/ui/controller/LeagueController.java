@@ -219,6 +219,66 @@ public class LeagueController {
         }
     }
 
+    @FXML
+    public void onBackToMainMenu() {
+        ButtonType saveAndExit    = new ButtonType("Kaydet ve Çık",    ButtonBar.ButtonData.YES);
+        ButtonType exitWithoutSave = new ButtonType("Kaydetmeden Çık", ButtonBar.ButtonData.NO);
+        ButtonType cancel          = new ButtonType("İptal",           ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Ana Menüye Dön");
+        confirm.setHeaderText(null);
+        confirm.setContentText("Oyununuzu kaydetmek ister misiniz?");
+        confirm.getButtonTypes().setAll(saveAndExit, exitWithoutSave, cancel);
+
+        Optional<ButtonType> choice = confirm.showAndWait();
+        if (choice.isEmpty() || choice.get() == cancel) return;
+
+        if (choice.get() == saveAndExit) {
+            List<String> existingSaves = saveLoadService.listSaves();
+            String saveName = null;
+
+            if (!existingSaves.isEmpty()) {
+                ButtonType overwrite  = new ButtonType("Üzerine Yaz",      ButtonBar.ButtonData.YES);
+                ButtonType createNew  = new ButtonType("Yeni Save Oluştur", ButtonBar.ButtonData.NO);
+                ButtonType cancelSave = new ButtonType("İptal",             ButtonBar.ButtonData.CANCEL_CLOSE);
+
+                ChoiceDialog<String> overwriteDialog = new ChoiceDialog<>(existingSaves.get(0), existingSaves);
+                overwriteDialog.setTitle("Save Seç");
+                overwriteDialog.setHeaderText("Mevcut save'in üzerine yaz veya yeni save oluştur:");
+                overwriteDialog.setContentText("Save:");
+                overwriteDialog.getDialogPane().getButtonTypes().setAll(overwrite, createNew, cancelSave);
+
+                Optional<ButtonType> overwriteChoice = overwriteDialog.showAndWait();
+                if (overwriteChoice.isEmpty() || overwriteChoice.get() == cancelSave) return;
+
+                if (overwriteChoice.get() == overwrite) {
+                    saveName = overwriteDialog.getSelectedItem();
+                }
+            }
+
+            if (saveName == null) {
+                TextInputDialog nameDialog = new TextInputDialog("save-" + System.currentTimeMillis());
+                nameDialog.setTitle("Oyunu Kaydet");
+                nameDialog.setHeaderText("Kayıt adı girin:");
+                nameDialog.setContentText("Kayıt:");
+                Optional<String> nameResult = nameDialog.showAndWait();
+                if (nameResult.isEmpty()) return;
+                saveName = nameResult.get();
+            }
+
+            try {
+                saveLoadService.saveGame(saveName);
+            } catch (RuntimeException e) {
+                showAlert(Alert.AlertType.ERROR, "Hata", "Kayıt başarısız: " + e.getMessage());
+                return;
+            }
+        }
+
+        SceneNavigator.navigateTo(SceneNavigator.Screen.MAIN_MENU);
+        GameSession.reset();
+    }
+
     public void refreshAll() {
         GameSession session = GameSession.getInstance();
         League league = session.getActiveLeague();
