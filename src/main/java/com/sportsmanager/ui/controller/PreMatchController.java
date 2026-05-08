@@ -22,11 +22,14 @@ import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
+import javafx.scene.shape.ArcType;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PreMatchController {
 
@@ -185,6 +188,78 @@ public class PreMatchController {
         double h = lineupCanvas.getHeight();
         GraphicsContext gc = lineupCanvas.getGraphicsContext2D();
 
+        String sportName = GameSession.getInstance().getActiveSport().getName();
+
+        if ("Basketball".equals(sportName)) {
+            // Parke zemin — koyu kahverengi
+            gc.setFill(Color.web("#6B3A1F"));
+            gc.fillRoundRect(0, 0, w, h, 10, 10);
+
+            // Parke deseni — yatay çizgiler
+            gc.setStroke(Color.web("#7D4A2A", 0.5));
+            gc.setLineWidth(0.8);
+            for (int i = 1; i < 12; i++) {
+                gc.strokeLine(0, h * i / 12.0, w, h * i / 12.0);
+            }
+
+            // Saha sınırı
+            gc.setStroke(Color.web("#ffffff", 0.7));
+            gc.setLineWidth(2);
+            gc.strokeRoundRect(5, 5, w - 10, h - 10, 8, 8);
+
+            // Alt yarı — boyalı alan (dikdörtgen)
+            gc.setStroke(Color.web("#ffffff", 0.6));
+            gc.setLineWidth(1.5);
+            double paintW = w * 0.52;
+            double paintH = h * 0.28;
+            double paintX = (w - paintW) / 2;
+            double paintY = h - paintH - 8;
+            gc.strokeRect(paintX, paintY, paintW, paintH);
+
+            // Serbest atış dairesi (boyalı alanın üstünde)
+            gc.strokeOval(paintX, paintY - paintH * 0.25, paintW, paintH * 0.5);
+
+            // Üç sayı yayı (alt)
+            gc.strokeArc(w * 0.06, h * 0.55, w * 0.88, h * 0.42, 180, 180, ArcType.OPEN);
+
+            // Pota çemberi (alt orta)
+            gc.setStroke(Color.web("#FF6B35"));
+            gc.setLineWidth(2.5);
+            gc.strokeOval(w * 0.40, h - 14, w * 0.20, h * 0.055);
+
+            // Backboard
+            gc.setStroke(Color.web("#ffffff", 0.9));
+            gc.setLineWidth(3);
+            gc.strokeLine(w * 0.32, h - 5, w * 0.68, h - 5);
+
+            // Orta çizgi
+            gc.setStroke(Color.web("#ffffff", 0.5));
+            gc.setLineWidth(1.5);
+            gc.strokeLine(8, h * 0.5, w - 8, h * 0.5);
+
+            // Orta daire
+            gc.strokeOval(w * 0.28, h * 0.43, w * 0.44, h * 0.14);
+
+            // Üst yarı — üç sayı yayı
+            gc.setStroke(Color.web("#ffffff", 0.3));
+            gc.strokeArc(w * 0.06, h * 0.03, w * 0.88, h * 0.42, 0, 180, ArcType.OPEN);
+
+            // 5 oyuncu — forma şeklinde
+            List<String> names = selectionMap.entrySet().stream()
+                    .filter(e -> e.getValue().get())
+                    .map(e -> e.getKey().getName().split(" ")[0])
+                    .limit(5)
+                    .collect(Collectors.toList());
+            while (names.size() < 5) names.add("");
+
+            drawBasketballPlayer(gc, w * 0.50, h * 0.80, "PG", names.get(0), w);
+            drawBasketballPlayer(gc, w * 0.15, h * 0.62, "SG", names.get(1), w);
+            drawBasketballPlayer(gc, w * 0.85, h * 0.62, "SF", names.get(2), w);
+            drawBasketballPlayer(gc, w * 0.28, h * 0.38, "PF", names.get(3), w);
+            drawBasketballPlayer(gc, w * 0.72, h * 0.38, "C",  names.get(4), w);
+            return;
+        }
+
         // Saha arka planı
         gc.setFill(Color.web("#0a3d1f"));
         gc.fillRoundRect(0, 0, w, h, 12, 12);
@@ -232,6 +307,28 @@ public class PreMatchController {
         gc.setTextAlign(javafx.scene.text.TextAlignment.CENTER);
         gc.setTextBaseline(javafx.geometry.VPos.CENTER);
         gc.fillText(label, x, y);
+    }
+
+    private void drawBasketballPlayer(GraphicsContext gc,
+            double x, double y, String label, String name, double w) {
+        double r = w * 0.07;
+        // Forma gövdesi (dikdörtgen)
+        gc.setFill(Color.web("#e94560", 0.85));
+        gc.fillRoundRect(x - r, y - r * 0.8, r * 2, r * 2.2, 6, 6);
+        // Forma numarası yeri (beyaz oval)
+        gc.setFill(Color.web("#ffffff", 0.9));
+        gc.fillOval(x - r * 0.45, y - r * 0.3, r * 0.9, r * 0.9);
+        // Pozisyon etiketi
+        gc.setFill(Color.web("#e94560"));
+        gc.setFont(javafx.scene.text.Font.font("Courier New",
+                javafx.scene.text.FontWeight.BOLD, 9));
+        gc.setTextAlign(javafx.scene.text.TextAlignment.CENTER);
+        gc.setTextBaseline(javafx.geometry.VPos.CENTER);
+        gc.fillText(label, x, y + r * 0.15);
+        // İsim etiketi (altında)
+        gc.setFill(Color.web("#ffffff", 0.7));
+        gc.setFont(javafx.scene.text.Font.font("Courier New", 8));
+        gc.fillText(name, x, y + r * 1.5);
     }
 
     private int[] parseFormation(String tacticName) {
