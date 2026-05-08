@@ -108,6 +108,14 @@ public class FootballMatch extends AbstractMatch {
                 }
             }
 
+            eventBus.publish(new MinuteEvent(minute));
+
+            try {
+                Thread.sleep(222);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
         }
     }
 

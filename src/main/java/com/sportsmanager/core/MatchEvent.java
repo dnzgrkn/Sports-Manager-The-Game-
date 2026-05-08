@@ -3,7 +3,7 @@ package com.sportsmanager.core;
 public abstract class MatchEvent {
 
     public enum EventType {
-        GOAL, INJURY, SUBSTITUTION, PERIOD_END, MATCH_END
+        GOAL, INJURY, SUBSTITUTION, PERIOD_END, MATCH_END, MINUTE
     }
 
     private final long timestamp;

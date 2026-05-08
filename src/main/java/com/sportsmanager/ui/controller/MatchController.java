@@ -5,6 +5,7 @@ import com.sportsmanager.app.MatchOrchestrator;
 import com.sportsmanager.core.Fixture;
 import com.sportsmanager.core.GoalEvent;
 import com.sportsmanager.core.InjuryEvent;
+import com.sportsmanager.core.MinuteEvent;
 import com.sportsmanager.core.League;
 import com.sportsmanager.core.MatchEvent;
 import com.sportsmanager.core.MatchEventBus;
@@ -55,6 +56,7 @@ public class MatchController {
     private int liveAway = 0;
     private int homePoss = 50;
     private int awayPoss = 50;
+    private boolean matchFinished = false;
 
     @FXML
     public void initialize() {
@@ -98,7 +100,7 @@ public class MatchController {
             }
         };
 
-        matchTask.setOnSucceeded(e -> SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE));
+        matchTask.setOnSucceeded(e -> {});
         matchTask.setOnFailed(e -> Platform.runLater(() ->
                 appendLog("[#e94560]HATA: Maç simülasyonu başarısız.")));
 
@@ -127,9 +129,13 @@ public class MatchController {
 
     @FXML
     public void onContinue() {
-        periodEndPanel.setVisible(false);
-        periodEndPanel.setManaged(false);
-        periodPause.release();
+        if (matchFinished) {
+            SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE);
+        } else {
+            periodEndPanel.setVisible(false);
+            periodEndPanel.setManaged(false);
+            periodPause.release();
+        }
     }
 
     // ── Private helpers ───────────────────────────────────────
@@ -167,6 +173,10 @@ public class MatchController {
                 InjuryEvent inj = (InjuryEvent) event;
                 Platform.runLater(() -> appendLog("[#e94560]🚑  " + inj.getDescription()));
             }
+            case MINUTE -> {
+                MinuteEvent me = (MinuteEvent) event;
+                Platform.runLater(() -> minuteLabel.setText(me.getMinute() + "'"));
+            }
             case PERIOD_END -> {
                 PeriodEndEvent pe = (PeriodEndEvent) event;
                 int periodNum = pe.getPeriodIndex() + 1;
@@ -184,7 +194,13 @@ public class MatchController {
                     appendLog("[#f59e0b]─────  " + getPeriodLabel(periodNum - 1) + " Sonu:  "
                             + pe.getHomeScore() + " - " + pe.getAwayScore() + "  ─────");
 
-                    if (!isLastPeriod) {
+                    if (isLastPeriod) {
+                        matchFinished = true;
+                        periodEndLabel.setText("Maç Sona Erdi!  "
+                                + pe.getHomeScore() + " - " + pe.getAwayScore());
+                        periodEndPanel.setVisible(true);
+                        periodEndPanel.setManaged(true);
+                    } else {
                         periodLabel.setText(getPeriodLabel(periodNum) + " / " + totalPeriods);
                         periodEndLabel.setText(getPeriodLabel(periodNum - 1) + " Sonu");
                         refreshSubstitutionCombos();
@@ -193,12 +209,10 @@ public class MatchController {
                     }
                 });
 
-                if (!isLastPeriod) {
-                    try {
-                        periodPause.acquire();
-                    } catch (InterruptedException ex) {
-                        Thread.currentThread().interrupt();
-                    }
+                try {
+                    periodPause.acquire();
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
                 }
             }
             default -> {}
