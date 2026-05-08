@@ -68,7 +68,7 @@ public class MatchController {
             return;
         }
 
-        periodLabel.setText("Periyot 1 / " + totalPeriods);
+        periodLabel.setText(getPeriodLabel(0) + " / " + totalPeriods);
         scoreLabel.setText(fixture.getHomeTeam().getName() + "  0 - 0  " + fixture.getAwayTeam().getName());
 
         setupEventLog();
@@ -142,12 +142,12 @@ public class MatchController {
                     String home = fixture.getHomeTeam().getName();
                     String away = fixture.getAwayTeam().getName();
                     scoreLabel.setText(home + "  " + pe.getHomeScore() + " - " + pe.getAwayScore() + "  " + away);
-                    appendLog("[#f59e0b]─────  Periyot " + periodNum + " Sonu:  "
+                    appendLog("[#f59e0b]─────  " + getPeriodLabel(periodNum - 1) + " Sonu:  "
                             + pe.getHomeScore() + " - " + pe.getAwayScore() + "  ─────");
 
                     if (!isLastPeriod) {
-                        periodLabel.setText("Periyot " + (periodNum + 1) + " / " + totalPeriods);
-                        periodEndLabel.setText("Periyot " + periodNum + " Sonu");
+                        periodLabel.setText(getPeriodLabel(periodNum) + " / " + totalPeriods);
+                        periodEndLabel.setText(getPeriodLabel(periodNum - 1) + " Sonu");
                         refreshSubstitutionCombos();
                         periodEndPanel.setVisible(true);
                         periodEndPanel.setManaged(true);
@@ -214,6 +214,16 @@ public class MatchController {
         inPlayerCombo.setItems(FXCollections.observableArrayList(bench));
         outPlayerCombo.setValue(null);
         inPlayerCombo.setValue(null);
+    }
+
+    private String getPeriodLabel(int periodIndex) {
+        if (totalPeriods == 2) {
+            return periodIndex == 0 ? "İlk Yarı" : "İkinci Yarı";
+        } else if (totalPeriods == 4) {
+            return (periodIndex + 1) + ". Çeyrek";
+        } else {
+            return "Periyot " + (periodIndex + 1);
+        }
     }
 
     private void appendLog(String entry) {

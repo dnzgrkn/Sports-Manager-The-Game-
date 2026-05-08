@@ -47,8 +47,8 @@ public class BasketballDataLoader {
             "Ahmet", "Mehmet", "Ali", "Mustafa", "Emre", "Burak", "Kerem",
             "Serhat", "Okan", "Arda", "Hakan", "Volkan", "Mert", "Kaan",
             "Yusuf", "Enes", "Umut", "Furkan", "Berkay", "Taner",
-            "Ayşe", "Fatma", "Zeynep", "Elif", "Selin", "Deniz", "Ceren",
-            "Büşra", "Merve", "Nazlı"
+            "Osman", "Salih", "Caner", "Gökhan", "Barış", "Sercan",
+            "Tolga", "Uğur", "Alper", "Berk"
         );
         List<String> lastNames = Arrays.asList(
             "Yılmaz", "Kaya", "Demir", "Şahin", "Çelik", "Yıldız", "Güneş",
