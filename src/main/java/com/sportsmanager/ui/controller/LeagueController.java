@@ -73,6 +73,11 @@ public class LeagueController {
         orchestrator = new LeagueOrchestrator();
         setupColumns();
         refreshAll();
+        if ("Basketball".equals(
+                GameSession.getInstance().getActiveSport().getName())) {
+            pointsColumn.setVisible(false);
+            drawsColumn.setVisible(false);
+        }
     }
 
     private void setupColumns() {
