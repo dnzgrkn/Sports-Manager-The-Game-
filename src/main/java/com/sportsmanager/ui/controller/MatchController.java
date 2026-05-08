@@ -158,8 +158,8 @@ public class MatchController {
                     String away = fixture.getAwayTeam().getName();
                     scoreLabel.setText(home + "  " + snapHome + " - " + snapAway + "  " + away);
                     minuteLabel.setText(g.getMinute() + "'");
-                    homePossLabel.setText("%" + snapHP);
-                    awayPossLabel.setText("%" + snapAP);
+                    homePossLabel.setText(snapHP + "%");
+                    awayPossLabel.setText(snapAP + "%");
                     appendLog("[#22c55e]⚽  " + g.getDescription());
                 });
             }

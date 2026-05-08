@@ -58,11 +58,11 @@
             <VBox alignment="CENTER_RIGHT" prefWidth="160" spacing="4">
                 <Label text="● CANLI" styleClass="live-badge"/>
                 <HBox alignment="CENTER" spacing="6">
-                    <Label fx:id="homePossLabel" text="%50"
+                    <Label fx:id="homePossLabel" text="50%"
                            style="-fx-text-fill: #4a9eff; -fx-font-family: 'Courier New'; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                     <Label text="TOP"
                            style="-fx-text-fill: #eaeaea; -fx-font-family: 'Courier New'; -fx-font-size: 9px; -fx-opacity: 0.4;"/>
-                    <Label fx:id="awayPossLabel" text="%50"
+                    <Label fx:id="awayPossLabel" text="50%"
                            style="-fx-text-fill: #f59e0b; -fx-font-family: 'Courier New'; -fx-font-size: 11px; -fx-font-weight: bold;"/>
                 </HBox>
             </VBox>
