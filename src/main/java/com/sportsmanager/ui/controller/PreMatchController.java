@@ -12,11 +12,14 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.cell.CheckBoxListCell;
+import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class PreMatchController {
 
     @FXML private ListView<Player> playerListView;
     @FXML private ComboBox<Tactic> tacticComboBox;
+    @FXML private Canvas lineupCanvas;
 
     private int squadSize;
     private final Map<Player, BooleanProperty> selectionMap = new LinkedHashMap<>();
@@ -76,12 +80,14 @@ public class PreMatchController {
         if (!tactics.isEmpty()) {
             tacticComboBox.setValue(tactics.get(0));
             updateModifiers(tactics.get(0));
+            drawLineup(tactics.get(0));
         }
     }
 
     @FXML
     public void onTacticChanged() {
         updateModifiers(tacticComboBox.getValue());
+        drawLineup(tacticComboBox.getValue());
     }
 
     @FXML
@@ -171,6 +177,76 @@ public class PreMatchController {
             attackModLabel.setText("—");
             defenseModLabel.setText("—");
         }
+    }
+
+    private void drawLineup(Tactic tactic) {
+        if (lineupCanvas == null) return;
+        double w = lineupCanvas.getWidth();
+        double h = lineupCanvas.getHeight();
+        GraphicsContext gc = lineupCanvas.getGraphicsContext2D();
+
+        // Saha arka planı
+        gc.setFill(Color.web("#0a3d1f"));
+        gc.fillRoundRect(0, 0, w, h, 12, 12);
+
+        // Çizgiler
+        gc.setStroke(Color.web("#ffffff", 0.15));
+        gc.setLineWidth(1);
+        gc.strokeLine(0, h / 2, w, h / 2);
+        gc.strokeOval(w / 2 - 30, h / 2 - 30, 60, 60);
+        gc.strokeRect(w * 0.2, h * 0.75, w * 0.6, h * 0.22);
+        gc.strokeRect(w * 0.2, h * 0.03, w * 0.6, h * 0.22);
+
+        String tacticName = tactic != null ? tactic.getName() : "4-4-2 Balanced";
+        int[] formation = parseFormation(tacticName);
+
+        drawPlayer(gc, w / 2, h * 0.92, "GK", w);
+
+        double[] rowY;
+        if (formation.length == 4) {
+            rowY = new double[]{h * 0.75, h * 0.55, h * 0.35, h * 0.15};
+        } else {
+            rowY = new double[]{h * 0.72, h * 0.45, h * 0.18};
+        }
+
+        String[] rowLabels = {"DEF", "MID", "FWD", "ATT"};
+        for (int row = 0; row < Math.min(formation.length, rowY.length); row++) {
+            int count = formation[row];
+            for (int i = 0; i < count; i++) {
+                double x = w * (i + 1.0) / (count + 1.0);
+                drawPlayer(gc, x, rowY[row], rowLabels[row], w);
+            }
+        }
+    }
+
+    private void drawPlayer(GraphicsContext gc, double x, double y,
+                            String label, double canvasW) {
+        double r = canvasW * 0.055;
+        gc.setStroke(Color.web("#e94560"));
+        gc.setLineWidth(1.5);
+        gc.strokeOval(x - r, y - r, r * 2, r * 2);
+        gc.setFill(Color.web("#e94560", 0.25));
+        gc.fillOval(x - r, y - r, r * 2, r * 2);
+        gc.setFill(Color.web("#ffffff"));
+        gc.setFont(javafx.scene.text.Font.font("Courier New", 8));
+        gc.setTextAlign(javafx.scene.text.TextAlignment.CENTER);
+        gc.setTextBaseline(javafx.geometry.VPos.CENTER);
+        gc.fillText(label, x, y);
+    }
+
+    private int[] parseFormation(String tacticName) {
+        String[] parts = tacticName.split(" ");
+        if (parts.length > 0) {
+            String[] nums = parts[0].split("-");
+            try {
+                int[] result = new int[nums.length];
+                for (int i = 0; i < nums.length; i++) {
+                    result[i] = Integer.parseInt(nums[i]);
+                }
+                return result;
+            } catch (NumberFormatException ignored) {}
+        }
+        return new int[]{4, 4, 2};
     }
 
     private void showWarning(String message) {

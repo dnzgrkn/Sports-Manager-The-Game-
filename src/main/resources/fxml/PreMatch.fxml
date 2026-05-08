@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -92,6 +93,8 @@
                 <ComboBox fx:id="tacticComboBox"
                           prefWidth="248" prefHeight="42"
                           onAction="#onTacticChanged"/>
+
+                <Canvas fx:id="lineupCanvas" width="248" height="300"/>
 
                 <Region prefHeight="36"/>
 
