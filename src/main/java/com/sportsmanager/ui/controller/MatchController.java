@@ -25,6 +25,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
@@ -42,6 +43,7 @@ public class MatchController {
     @FXML private ListView<String> eventLogView;
     @FXML private VBox periodEndPanel;
     @FXML private Label periodEndLabel;
+    @FXML private HBox subPanel;
     @FXML private ComboBox<Player> outPlayerCombo;
     @FXML private ComboBox<Player> inPlayerCombo;
 
@@ -251,6 +253,8 @@ public class MatchController {
                         matchFinished = true;
                         periodEndLabel.setText("Maç Sona Erdi!  "
                                 + pe.getHomeScore() + " - " + pe.getAwayScore());
+                        subPanel.setVisible(false);
+                        subPanel.setManaged(false);
                         periodEndPanel.setVisible(true);
                         periodEndPanel.setManaged(true);
                     } else {

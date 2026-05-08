@@ -94,7 +94,7 @@
                               -fx-opacity: 0.3;"/>
             </HBox>
 
-            <HBox alignment="CENTER_LEFT" spacing="12"
+            <HBox fx:id="subPanel" alignment="CENTER_LEFT" spacing="12"
                   style="-fx-padding: 10 0 14 0;">
                 <Label text="DEĞİŞİKLİK"
                        style="-fx-text-fill: #eaeaea;
