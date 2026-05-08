@@ -66,6 +66,22 @@ public class LeagueOrchestrator {
         return seasonOver;
     }
 
+    public void completeWeekAfterPlayerMatch() {
+        League league = requireLeague();
+        int currentWeek = gameSession.getCurrentWeek();
+        List<Fixture> fixtures = league.getFixturesForWeek(currentWeek);
+        Team playerTeam = gameSession.getPlayerTeam();
+
+        // Sadece oyuncu maçı dışındaki oynanmamış maçları simüle et
+        for (Fixture fixture : fixtures) {
+            if (!isPlayerFixture(fixture, playerTeam) && !fixture.isPlayed()) {
+                simulateFixture(fixture);
+            }
+        }
+        decrementAllInjuries(league);
+        seasonOver = currentWeek >= league.getTotalWeeks();
+    }
+
     private League requireLeague() {
         League league = gameSession.getActiveLeague();
         if (league == null) {

@@ -130,7 +130,23 @@ public class MatchController {
     @FXML
     public void onContinue() {
         if (matchFinished) {
-            SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE);
+            periodEndPanel.setVisible(false);
+            periodEndPanel.setManaged(false);
+            Task<Void> task = new Task<>() {
+                @Override
+                protected Void call() {
+                    new com.sportsmanager.app.LeagueOrchestrator()
+                            .completeWeekAfterPlayerMatch();
+                    return null;
+                }
+            };
+            task.setOnSucceeded(e ->
+                SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE));
+            task.setOnFailed(e ->
+                task.getException().printStackTrace());
+            Thread t = new Thread(task);
+            t.setDaemon(true);
+            t.start();
         } else {
             periodEndPanel.setVisible(false);
             periodEndPanel.setManaged(false);
