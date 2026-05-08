@@ -305,15 +305,21 @@ public class LeagueController {
         weekLabel.setText(session.getCurrentWeek() + " / " + league.getTotalWeeks());
         nextOpponentLabel.setText(findNextOpponent(league, playerTeam));
 
+        standingsTable.getItems().clear();
         standingsTable.setItems(FXCollections.observableArrayList(league.getTable()));
+        standingsTable.refresh();
 
         List<Fixture> sorted = league.getFixtures().stream()
                 .sorted(Comparator.comparingInt(Fixture::getWeekNumber))
                 .collect(Collectors.toList());
+        fixtureList.getItems().clear();
         fixtureList.setItems(FXCollections.observableArrayList(sorted));
+        fixtureList.refresh();
 
+        squadList.getItems().clear();
         if (playerTeam != null) {
             squadList.setItems(FXCollections.observableArrayList(playerTeam.getSquad()));
+            squadList.refresh();
         }
     }
 
