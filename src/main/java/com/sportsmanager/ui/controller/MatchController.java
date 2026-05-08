@@ -34,6 +34,9 @@ public class MatchController {
 
     @FXML private Label periodLabel;
     @FXML private Label scoreLabel;
+    @FXML private Label minuteLabel;
+    @FXML private Label homePossLabel;
+    @FXML private Label awayPossLabel;
     @FXML private ListView<String> eventLogView;
     @FXML private VBox periodEndPanel;
     @FXML private Label periodEndLabel;
@@ -47,6 +50,11 @@ public class MatchController {
     private Team playerTeam;
     private int totalPeriods;
     private int squadSize;
+
+    private int liveHome = 0;
+    private int liveAway = 0;
+    private int homePoss = 50;
+    private int awayPoss = 50;
 
     @FXML
     public void initialize() {
@@ -67,6 +75,9 @@ public class MatchController {
             Platform.runLater(() -> SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE));
             return;
         }
+
+        liveHome = liveAway = 0;
+        homePoss = awayPoss = 50;
 
         periodLabel.setText(getPeriodLabel(0) + " / " + totalPeriods);
         scoreLabel.setText(fixture.getHomeTeam().getName() + "  0 - 0  " + fixture.getAwayTeam().getName());
@@ -127,7 +138,30 @@ public class MatchController {
         switch (event.getType()) {
             case GOAL -> {
                 GoalEvent g = (GoalEvent) event;
-                Platform.runLater(() -> appendLog("[#22c55e]⚽  " + g.getDescription()));
+                boolean isHomeGoal = fixture.getHomeTeam().getSquad().stream()
+                        .anyMatch(p -> p.getName().equals(g.getScorerName()));
+                if (isHomeGoal) liveHome++; else liveAway++;
+
+                if (isHomeGoal) {
+                    homePoss = Math.min(85, homePoss + 5);
+                    awayPoss = 100 - homePoss;
+                } else {
+                    awayPoss = Math.min(85, awayPoss + 5);
+                    homePoss = 100 - awayPoss;
+                }
+
+                int snapHome = liveHome, snapAway = liveAway;
+                int snapHP = homePoss, snapAP = awayPoss;
+
+                Platform.runLater(() -> {
+                    String home = fixture.getHomeTeam().getName();
+                    String away = fixture.getAwayTeam().getName();
+                    scoreLabel.setText(home + "  " + snapHome + " - " + snapAway + "  " + away);
+                    minuteLabel.setText(g.getMinute() + "'");
+                    homePossLabel.setText("%" + snapHP);
+                    awayPossLabel.setText("%" + snapAP);
+                    appendLog("[#22c55e]⚽  " + g.getDescription());
+                });
             }
             case INJURY -> {
                 InjuryEvent inj = (InjuryEvent) event;
@@ -138,10 +172,15 @@ public class MatchController {
                 int periodNum = pe.getPeriodIndex() + 1;
                 boolean isLastPeriod = periodNum >= totalPeriods;
 
+                liveHome = pe.getHomeScore();
+                liveAway = pe.getAwayScore();
+                int periodEndMinute = periodNum * (totalPeriods == 4 ? 10 : 45);
+
                 Platform.runLater(() -> {
                     String home = fixture.getHomeTeam().getName();
                     String away = fixture.getAwayTeam().getName();
                     scoreLabel.setText(home + "  " + pe.getHomeScore() + " - " + pe.getAwayScore() + "  " + away);
+                    minuteLabel.setText(periodEndMinute + "'");
                     appendLog("[#f59e0b]─────  " + getPeriodLabel(periodNum - 1) + " Sonu:  "
                             + pe.getHomeScore() + " - " + pe.getAwayScore() + "  ─────");
 

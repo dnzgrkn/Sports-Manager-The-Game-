@@ -20,6 +20,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
@@ -243,17 +244,23 @@ public class LeagueController {
                 ButtonType createNew  = new ButtonType("Yeni Save Oluştur", ButtonBar.ButtonData.NO);
                 ButtonType cancelSave = new ButtonType("İptal",             ButtonBar.ButtonData.CANCEL_CLOSE);
 
-                ChoiceDialog<String> overwriteDialog = new ChoiceDialog<>(existingSaves.get(0), existingSaves);
-                overwriteDialog.setTitle("Save Seç");
-                overwriteDialog.setHeaderText("Mevcut save'in üzerine yaz veya yeni save oluştur:");
-                overwriteDialog.setContentText("Save:");
-                overwriteDialog.getDialogPane().getButtonTypes().setAll(overwrite, createNew, cancelSave);
+                Alert modeAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                modeAlert.setTitle("Save Seç");
+                modeAlert.setHeaderText("Mevcut save'in üzerine yaz veya yeni save oluştur?");
+                modeAlert.setContentText(null);
+                modeAlert.getButtonTypes().setAll(overwrite, createNew, cancelSave);
 
-                Optional<ButtonType> overwriteChoice = overwriteDialog.showAndWait();
-                if (overwriteChoice.isEmpty() || overwriteChoice.get() == cancelSave) return;
+                Optional<ButtonType> modeChoice = modeAlert.showAndWait();
+                if (modeChoice.isEmpty() || modeChoice.get() == cancelSave) return;
 
-                if (overwriteChoice.get() == overwrite) {
-                    saveName = overwriteDialog.getSelectedItem();
+                if (modeChoice.get() == overwrite) {
+                    ChoiceDialog<String> pickDialog = new ChoiceDialog<>(existingSaves.get(0), existingSaves);
+                    pickDialog.setTitle("Save Seç");
+                    pickDialog.setHeaderText("Üzerine yazılacak save'i seçin:");
+                    pickDialog.setContentText("Save:");
+                    Optional<String> picked = pickDialog.showAndWait();
+                    if (picked.isEmpty()) return;
+                    saveName = picked.get();
                 }
             }
 
