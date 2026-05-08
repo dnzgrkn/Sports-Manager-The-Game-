@@ -14,6 +14,7 @@ import com.sportsmanager.core.Sport;
 import com.sportsmanager.core.Team;
 import com.sportsmanager.ui.SceneNavigator;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.concurrent.Task;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -158,18 +159,28 @@ public class LeagueController {
 
     @FXML
     public void onAdvanceWeek() {
-        orchestrator.advanceWeek();
-
-        if (orchestrator.isSeasonOver()) {
-            SceneNavigator.navigateTo(SceneNavigator.Screen.SEASON_END);
-            return;
-        }
-
-        if (orchestrator.hasPlayerMatchThisWeek()) {
-            SceneNavigator.navigateTo(SceneNavigator.Screen.PRE_MATCH);
-        } else {
-            refreshAll();
-        }
+        Task<Void> task = new Task<>() {
+            @Override
+            protected Void call() {
+                orchestrator.advanceWeek();
+                return null;
+            }
+        };
+        task.setOnSucceeded(e -> {
+            if (orchestrator.isSeasonOver()) {
+                SceneNavigator.navigateTo(SceneNavigator.Screen.SEASON_END);
+                return;
+            }
+            if (orchestrator.hasPlayerMatchThisWeek()) {
+                SceneNavigator.navigateTo(SceneNavigator.Screen.PRE_MATCH);
+            } else {
+                refreshAll();
+            }
+        });
+        task.setOnFailed(e -> task.getException().printStackTrace());
+        Thread t = new Thread(task);
+        t.setDaemon(true);
+        t.start();
     }
 
     @FXML
