@@ -19,7 +19,6 @@ public class MainMenuController {
     private final SaveLoadService saveLoadService = new SaveLoadService();
 
     @FXML private ComboBox<String> sportComboBox;
-    @FXML private TextField teamNameField;
 
     @FXML
     public void initialize() {
