@@ -88,7 +88,8 @@ public class FootballMatch extends AbstractMatch {
                             : attackingLineup.get(random.nextInt(attackingLineup.size()));
                     String scorer = scorerPlayer != null ? scorerPlayer.getName() : attackingTeam.getName();
                     if (scorerPlayer != null) scorerPlayer.incrementGoalsScored();
-                    eventBus.publish(new GoalEvent(scorer, minute));
+                    String teamName = homeHasBall ? homeTeam.getName() : awayTeam.getName();
+                    eventBus.publish(new GoalEvent(scorer + " (" + teamName + ")", minute));
                 }
             }
 
@@ -128,9 +129,13 @@ public class FootballMatch extends AbstractMatch {
 
     @Override
     protected MatchResult buildResult() {
-        int squadSize = sport.getSquadSize();
-        for (Player p : homeTeam.getStartingLineup(squadSize)) p.incrementMatchesPlayed();
-        for (Player p : awayTeam.getStartingLineup(squadSize)) p.incrementMatchesPlayed();
+        int size = sport.getSquadSize();
+        List<Player> homeStarters = homeTeam.getSquad()
+                .subList(0, Math.min(size, homeTeam.getSquad().size()));
+        List<Player> awayStarters = awayTeam.getSquad()
+                .subList(0, Math.min(size, awayTeam.getSquad().size()));
+        for (Player p : homeStarters) p.incrementMatchesPlayed();
+        for (Player p : awayStarters) p.incrementMatchesPlayed();
         return new MatchResult(homeTeamName, awayTeamName, homeScore, awayScore);
     }
 
