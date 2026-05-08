@@ -461,7 +461,36 @@ public class LeagueController {
                     """);
         }
 
-        content.getChildren().addAll(nameLabel, badges, ratingRow, divider, attrBox, injDivider, injLabel);
+        // Season stats
+        Region statsDivider = new Region();
+        statsDivider.setPrefHeight(1);
+        statsDivider.setStyle("-fx-background-color: #eaeaea; -fx-opacity: 0.08;");
+
+        Label statsTitle = new Label("SEZON İSTATİSTİKLERİ");
+        statsTitle.setStyle("""
+                -fx-text-fill: #f59e0b;
+                -fx-font-family: 'Courier New';
+                -fx-font-size: 10px;
+                -fx-font-weight: bold;
+                -fx-opacity: 0.7;
+                """);
+
+        Label matchesLabel = new Label("Oynanan Maç: " + player.getMatchesPlayed());
+        matchesLabel.setStyle("""
+                -fx-text-fill: #eaeaea;
+                -fx-font-family: 'Courier New';
+                -fx-font-size: 12px;
+                """);
+
+        Label goalsLabel = new Label("Gol: " + player.getGoalsScored());
+        goalsLabel.setStyle("""
+                -fx-text-fill: #eaeaea;
+                -fx-font-family: 'Courier New';
+                -fx-font-size: 12px;
+                """);
+
+        content.getChildren().addAll(nameLabel, badges, ratingRow, divider, attrBox, injDivider, injLabel,
+                statsDivider, statsTitle, matchesLabel, goalsLabel);
         pane.setContent(content);
         pane.getButtonTypes().add(ButtonType.CLOSE);
 

@@ -12,6 +12,8 @@ public abstract class Player {
     private int injuredForGames;
     private String position;
     private Map<String, Integer> attributes;
+    private int matchesPlayed = 0;
+    private int goalsScored = 0;
 
     public Player(String name, int age, String position) {
         this.id = UUID.randomUUID();
@@ -58,4 +60,10 @@ public abstract class Player {
 
     public Map<String, Integer> getAttributes() { return attributes; }
     public void setAttributes(Map<String, Integer> attributes) { this.attributes = attributes; }
+
+    public int getMatchesPlayed() { return matchesPlayed; }
+    public void incrementMatchesPlayed() { matchesPlayed++; }
+
+    public int getGoalsScored() { return goalsScored; }
+    public void incrementGoalsScored() { goalsScored++; }
 }
