@@ -371,7 +371,14 @@ public class LeagueController {
                 """);
         badges.getChildren().addAll(posBadge, ageBadge);
 
-        // Overall rating
+        // Overall rating + star rating
+        int overall = player.computeOverallRating();
+        String stars = overall >= 90 ? "★★★★★"
+                     : overall >= 80 ? "★★★★☆"
+                     : overall >= 70 ? "★★★☆☆"
+                     : overall >= 60 ? "★★☆☆☆"
+                     :                 "★☆☆☆☆";
+
         HBox ratingRow = new HBox(12);
         ratingRow.setAlignment(Pos.CENTER_LEFT);
         Label ratingTitle = new Label("GENEL RATING");
@@ -382,7 +389,7 @@ public class LeagueController {
                 -fx-opacity: 0.38;
                 -fx-pref-width: 100;
                 """);
-        Label ratingValue = new Label(String.valueOf(player.computeOverallRating()));
+        Label ratingValue = new Label(String.valueOf(overall));
         ratingValue.setStyle("""
                 -fx-text-fill: #e94560;
                 -fx-font-family: 'Courier New';
@@ -390,7 +397,12 @@ public class LeagueController {
                 -fx-font-weight: bold;
                 -fx-effect: dropshadow(gaussian, #e94560, 10, 0.3, 0, 0);
                 """);
-        ratingRow.getChildren().addAll(ratingTitle, ratingValue);
+        Label starsLabel = new Label(stars);
+        starsLabel.setStyle("""
+                -fx-text-fill: #f59e0b;
+                -fx-font-size: 16px;
+                """);
+        ratingRow.getChildren().addAll(ratingTitle, ratingValue, starsLabel);
 
         // Divider
         Region divider = new Region();
@@ -407,11 +419,29 @@ public class LeagueController {
                     ? (double) (value - range[0]) / (range[1] - range[0])
                     : value / 100.0;
 
+            String shortName = switch (attrName.toLowerCase()) {
+                case "shooting"             -> "SHO";
+                case "pace", "speed"        -> "PAC";
+                case "passing"              -> "PAS";
+                case "dribbling"            -> "DRI";
+                case "defending"            -> "DEF";
+                case "heading"              -> "HEA";
+                case "stamina"              -> "STA";
+                case "rebounding"           -> "REB";
+                default -> attrName.length() > 3
+                        ? attrName.substring(0, 3).toUpperCase()
+                        : attrName.toUpperCase();
+            };
+
+            String valueColor = value >= 80 ? "#22c55e"
+                              : value >= 60 ? "#f59e0b"
+                              :               "#e94560";
+
             HBox row = new HBox(10);
             row.setAlignment(Pos.CENTER_LEFT);
 
-            Label attrLabel = new Label(attrName.toUpperCase());
-            attrLabel.setMinWidth(110);
+            Label attrLabel = new Label(shortName);
+            attrLabel.setMinWidth(40);
             attrLabel.setStyle("""
                     -fx-text-fill: #eaeaea;
                     -fx-font-family: 'Courier New';
@@ -420,18 +450,16 @@ public class LeagueController {
                     """);
 
             ProgressBar bar = new ProgressBar(Math.max(0, Math.min(1, progress)));
-            bar.setPrefWidth(190);
+            bar.setPrefWidth(220);
             bar.setPrefHeight(8);
-            bar.setStyle("-fx-accent: #4a9eff;");
+            bar.setStyle("-fx-accent: " + valueColor + ";");
 
             Label valLabel = new Label(String.valueOf(value));
             valLabel.setMinWidth(30);
-            valLabel.setStyle("""
-                    -fx-text-fill: #eaeaea;
-                    -fx-font-family: 'Courier New';
-                    -fx-font-size: 12px;
-                    -fx-font-weight: bold;
-                    """);
+            valLabel.setStyle("-fx-text-fill: " + valueColor + "; "
+                    + "-fx-font-family: 'Courier New'; "
+                    + "-fx-font-size: 12px; "
+                    + "-fx-font-weight: bold;");
 
             row.getChildren().addAll(attrLabel, bar, valLabel);
             attrBox.getChildren().add(row);
