@@ -106,12 +106,6 @@ public class FootballMatch extends AbstractMatch {
                 }
             }
 
-            try {
-                Thread.sleep(15);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                return;
-            }
         }
     }
 
