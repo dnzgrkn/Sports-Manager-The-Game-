@@ -244,7 +244,8 @@ public class MatchController {
             case PERIOD_END -> {
                 PeriodEndEvent pe = (PeriodEndEvent) event;
                 int periodNum = pe.getPeriodIndex() + 1;
-                boolean isLastPeriod = periodNum >= totalPeriods;
+                boolean isLastPeriod = periodNum >= totalPeriods
+                        || pe.getPeriodIndex() == -1;
 
                 liveHome = pe.getHomeScore();
                 liveAway = pe.getAwayScore();
@@ -336,6 +337,7 @@ public class MatchController {
     }
 
     private String getPeriodLabel(int periodIndex) {
+        if (periodIndex == -1) return "OT";
         if (totalPeriods == 2) {
             return periodIndex == 0 ? "İlk Yarı" : "İkinci Yarı";
         } else if (totalPeriods == 4) {

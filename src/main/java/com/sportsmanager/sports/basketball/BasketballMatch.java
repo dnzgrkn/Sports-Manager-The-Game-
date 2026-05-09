@@ -115,12 +115,39 @@ public class BasketballMatch extends AbstractMatch {
 
     @Override
     protected MatchResult buildResult() {
-        // Tiebreaker for basketball: no draws allowed, overtime until a winner emerges
-        while (homeScore == awayScore) {
-            if (random.nextBoolean()) {
-                homeScore += 2;
-            } else {
-                awayScore += 2;
+        if (homeScore == awayScore) {
+            // OT event publish et
+            if (eventBus != null) {
+                eventBus.publish(new PeriodEndEvent(-1, homeScore, awayScore));
+                // -1 index OT olduğunu belirtir
+            }
+
+            // Kısa OT simülasyonu — 5 tick
+            int squadSize = sport.getSquadSize();
+            List<Player> homeLineup = homeTeam.getStartingLineup(squadSize);
+            List<Player> awayLineup = awayTeam.getStartingLineup(squadSize);
+
+            Tactic homeTacticRaw = homeTeam.getActiveTactic();
+            Tactic awayTacticRaw = awayTeam.getActiveTactic();
+            BasketballTactic homeTactic = (homeTacticRaw instanceof BasketballTactic bt)
+                    ? bt : BasketballTactic.getAll().get(0);
+            BasketballTactic awayTactic = (awayTacticRaw instanceof BasketballTactic bt)
+                    ? bt : BasketballTactic.getAll().get(0);
+
+            double homeAttack = homeTactic.getAttackMod() * averageRating(homeLineup);
+            double awayAttack = awayTactic.getAttackMod() * averageRating(awayLineup);
+            double homePoss = homeAttack / (homeAttack + awayAttack);
+
+            while (homeScore == awayScore) {
+                for (int tick = 0; tick < 5; tick++) {
+                    boolean isHome = random.nextDouble() < homePoss;
+                    if (random.nextDouble() < 0.90) {
+                        double shotRand = random.nextDouble();
+                        if (shotRand < 0.30) addScore(isHome, 3);
+                        else if (shotRand < 0.80) addScore(isHome, 2);
+                        else if (shotRand < 0.95) addScore(isHome, 1);
+                    }
+                }
             }
         }
         return new MatchResult(homeTeamName, awayTeamName, homeScore, awayScore);
