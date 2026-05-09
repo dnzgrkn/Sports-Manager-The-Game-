@@ -59,6 +59,17 @@ public class LeagueRecord {
         return headToHeadPoints.getOrDefault(opponentId, 0);
     }
 
+    public void reset() {
+        played = 0;
+        wins = 0;
+        draws = 0;
+        losses = 0;
+        goalsFor = 0;
+        goalsAgainst = 0;
+        points = 0;
+        headToHeadPoints.clear();
+    }
+
     public UUID getTeamId()     { return teamId; }
     public String getTeamName() { return teamName; }
     public int getPlayed()      { return played; }

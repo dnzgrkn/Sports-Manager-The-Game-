@@ -66,4 +66,9 @@ public abstract class Player {
 
     public int getGoalsScored() { return goalsScored; }
     public void incrementGoalsScored() { goalsScored++; }
+
+    public void resetSeasonStats() {
+        this.matchesPlayed = 0;
+        this.goalsScored = 0;
+    }
 }

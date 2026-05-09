@@ -67,15 +67,24 @@ public class SeasonEndController {
         GameSession session = GameSession.getInstance();
         League league = session.getActiveLeague();
 
+        // Oyuncuların sakatlık ve fitness'ını sıfırla
         for (Team team : league.getTeams()) {
             for (Player player : team.getSquad()) {
                 player.setInjured(0);
                 player.setFitness(100);
+                player.resetSeasonStats(); // gol ve maç sayısını sıfırla
             }
         }
 
+        // Standings'i sıfırla
+        for (LeagueRecord record : league.getStandings().values()) {
+            record.reset();
+        }
+
+        // Fixture'ları yeniden üret
         league.generateFixtures();
 
+        // Hafta sayacını sıfırla
         session.setCurrentWeek(0);
         league.setCurrentWeek(0);
         session.setLastTrainedWeek(-1);
