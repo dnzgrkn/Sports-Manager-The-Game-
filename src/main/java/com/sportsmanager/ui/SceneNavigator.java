@@ -24,7 +24,8 @@ public final class SceneNavigator {
         LEAGUE,
         PRE_MATCH,
         MATCH,
-        SEASON_END
+        SEASON_END,
+        PLAYOFF
     }
 
     public static void init(Stage stage) {
@@ -58,6 +59,7 @@ public final class SceneNavigator {
             case PRE_MATCH -> PRE_MATCH_FXML;
             case MATCH -> MATCH_FXML;
             case SEASON_END -> SEASON_END_FXML;
+            case PLAYOFF -> "/fxml/Playoff.fxml";
         };
     }
 }

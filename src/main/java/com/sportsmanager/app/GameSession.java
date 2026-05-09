@@ -1,8 +1,11 @@
 package com.sportsmanager.app;
 
+import com.sportsmanager.core.Fixture;
 import com.sportsmanager.core.League;
 import com.sportsmanager.core.Sport;
 import com.sportsmanager.core.Team;
+
+import java.util.List;
 
 public class GameSession {
 
@@ -15,6 +18,11 @@ public class GameSession {
     private Sport activeSport;
     private int currentWeek;
     private int lastTrainedWeek = -1;
+
+    private List<Fixture> playoffFixtures;
+    private String playoffRound = "QUARTERFINAL";
+    private Fixture currentPlayerFixture;
+    private boolean inPlayoff = false;
 
     private GameSession() {}
 
@@ -53,4 +61,16 @@ public class GameSession {
 
     public int getLastTrainedWeek()              { return lastTrainedWeek; }
     public void setLastTrainedWeek(int week)     { this.lastTrainedWeek = week; }
+
+    public List<Fixture> getPlayoffFixtures()          { return playoffFixtures; }
+    public void setPlayoffFixtures(List<Fixture> f)    { this.playoffFixtures = f; }
+
+    public String getPlayoffRound()                    { return playoffRound; }
+    public void setPlayoffRound(String round)          { this.playoffRound = round; }
+
+    public Fixture getCurrentPlayerFixture()           { return currentPlayerFixture; }
+    public void setCurrentPlayerFixture(Fixture f)     { this.currentPlayerFixture = f; }
+
+    public boolean isInPlayoff()                       { return inPlayoff; }
+    public void setInPlayoff(boolean inPlayoff)        { this.inPlayoff = inPlayoff; }
 }

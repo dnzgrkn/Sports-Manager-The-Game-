@@ -55,13 +55,16 @@ public class PreMatchController {
         Team playerTeam = session.getPlayerTeam();
         squadSize = sport.getSquadSize();
 
-        // Find this week's fixture for the player
-        Fixture fixture = league.getFixturesForWeek(session.getCurrentWeek()).stream()
-                .filter(f -> f.getHomeTeam() != null && f.getAwayTeam() != null)
-                .filter(f -> f.getHomeTeam().getId().equals(playerTeam.getId())
-                          || f.getAwayTeam().getId().equals(playerTeam.getId()))
-                .min(Comparator.comparingInt(Fixture::getWeekNumber))
-                .orElse(null);
+        // Find this week's fixture for the player (playoff fixture takes priority)
+        Fixture fixture = session.getCurrentPlayerFixture();
+        if (fixture == null) {
+            fixture = league.getFixturesForWeek(session.getCurrentWeek()).stream()
+                    .filter(f -> f.getHomeTeam() != null && f.getAwayTeam() != null)
+                    .filter(f -> f.getHomeTeam().getId().equals(playerTeam.getId())
+                              || f.getAwayTeam().getId().equals(playerTeam.getId()))
+                    .min(Comparator.comparingInt(Fixture::getWeekNumber))
+                    .orElse(null);
+        }
 
         if (fixture != null) {
             homeTeamLabel.setText(fixture.getHomeTeam().getName());

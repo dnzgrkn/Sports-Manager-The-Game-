@@ -173,7 +173,12 @@ public class LeagueController {
         };
         task.setOnSucceeded(e -> {
             if (orchestrator.isSeasonOver()) {
-                SceneNavigator.navigateTo(SceneNavigator.Screen.SEASON_END);
+                String sportName = GameSession.getInstance().getActiveSport().getName();
+                if ("Basketball".equals(sportName)) {
+                    SceneNavigator.navigateTo(SceneNavigator.Screen.PLAYOFF);
+                } else {
+                    SceneNavigator.navigateTo(SceneNavigator.Screen.SEASON_END);
+                }
                 return;
             }
             if (orchestrator.hasPlayerMatchThisWeek()) {

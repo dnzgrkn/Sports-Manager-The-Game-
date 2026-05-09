@@ -71,11 +71,14 @@ public class MatchController {
         squadSize = sport.getSquadSize();
 
         League league = session.getActiveLeague();
-        fixture = league.getFixturesForWeek(session.getCurrentWeek()).stream()
-                .filter(f -> f.getHomeTeam().getId().equals(playerTeam.getId())
-                          || f.getAwayTeam().getId().equals(playerTeam.getId()))
-                .findFirst()
-                .orElse(null);
+        fixture = session.getCurrentPlayerFixture();
+        if (fixture == null) {
+            fixture = league.getFixturesForWeek(session.getCurrentWeek()).stream()
+                    .filter(f -> f.getHomeTeam().getId().equals(playerTeam.getId())
+                              || f.getAwayTeam().getId().equals(playerTeam.getId()))
+                    .findFirst()
+                    .orElse(null);
+        }
 
         if (fixture != null) {
             matchWeek = fixture.getWeekNumber();
@@ -176,8 +179,14 @@ public class MatchController {
                 }
             };
 
-            task.setOnSucceeded(e ->
-                SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE));
+            task.setOnSucceeded(e -> {
+                GameSession.getInstance().setCurrentPlayerFixture(null);
+                if (GameSession.getInstance().isInPlayoff()) {
+                    SceneNavigator.navigateTo(SceneNavigator.Screen.PLAYOFF);
+                } else {
+                    SceneNavigator.navigateTo(SceneNavigator.Screen.LEAGUE);
+                }
+            });
             task.setOnFailed(e ->
                 task.getException().printStackTrace());
 
